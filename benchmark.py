@@ -1,6 +1,5 @@
 import itertools as itt
-import os
-import time
+import pathlib
 import timeit
 from typing import Optional
 
@@ -13,17 +12,17 @@ from pykeen.datasets import get_dataset
 from pykeen.sampling.filtering import BloomFilterer
 from tqdm import tqdm
 
-HERE = os.path.abspath(os.path.dirname(__file__))
-RESULTS_PATH = os.path.join(HERE, 'results.tsv')
-CHARTS = os.path.join(HERE, 'charts')
-ERROR_PLOT_SVG_PATH = os.path.join(CHARTS, 'errors.svg')
-ERROR_PLOT_PNG_PATH = os.path.join(CHARTS, 'errors.png')
-SIZE_PLOT_SVG_PATH = os.path.join(CHARTS, 'sizes.svg')
-SIZE_PLOT_PNG_PATH = os.path.join(CHARTS, 'sizes.png')
-CREATION_TIME_PLOT_SVG_PATH = os.path.join(CHARTS, 'creation_times.svg')
-CREATION_TIME_PLOT_PNG_PATH = os.path.join(CHARTS, 'creation_times.png')
-LOOKUP_TIME_PLOT_SVG_PATH = os.path.join(CHARTS, 'lookup_times.svg')
-LOOKUP_TIME_PLOT_PNG_PATH = os.path.join(CHARTS, 'lookup_times.png')
+HERE = pathlib.Path(__file__).parent
+RESULTS_PATH = HERE.joinpath('results.tsv')
+CHARTS = HERE.joinpath('charts')
+ERROR_PLOT_SVG_PATH = CHARTS.joinpath('errors.svg')
+ERROR_PLOT_PNG_PATH = CHARTS.joinpath('errors.png')
+SIZE_PLOT_SVG_PATH = CHARTS.joinpath('sizes.svg')
+SIZE_PLOT_PNG_PATH = CHARTS.joinpath('sizes.png')
+CREATION_TIME_PLOT_SVG_PATH = CHARTS.joinpath('creation_times.svg')
+CREATION_TIME_PLOT_PNG_PATH = CHARTS.joinpath('creation_times.png')
+LOOKUP_TIME_PLOT_SVG_PATH = CHARTS.joinpath('lookup_times.svg')
+LOOKUP_TIME_PLOT_PNG_PATH = CHARTS.joinpath('lookup_times.png')
 
 DEFAULT_PRECISION = 5
 DEFAULT_TRIALS = 10
@@ -116,7 +115,7 @@ def plot_creation_time(df: pd.DataFrame):
 
 
 def get_df(force: bool = False, trials: Optional[int] = None, precision: Optional[int] = None):
-    if os.path.exists(RESULTS_PATH) and not force:
+    if RESULTS_PATH.is_file() and not force:
         return pd.read_csv(RESULTS_PATH, sep='\t')
 
     if trials is None:
