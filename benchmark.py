@@ -122,6 +122,15 @@ def benchmark_filterer(
     filterer_kwargs: Optional[Mapping[str, Any]] = None,
 ) -> Iterable[Mapping[str, Any]]:
     """Benchmark a filterer."""
+    filterer_kwargs = filterer_kwargs or {}
+
+    # include some meta-data into each entry
+    kwargs = dict(
+        dataset=dataset.get_normalized_name(),
+        filterer=filterer,
+        **filterer_kwargs,
+    )
+
     # measure creation (=indexing) time
     filterer_cls = filterer_resolver.lookup(filterer)
     timer = TorchTimer(
@@ -135,9 +144,10 @@ def benchmark_filterer(
     measurement = timer.blocked_autorange()
     yield dict(
         operation="index",
+        subset="train",
         time=measurement.median,
         num_triples=dataset.training.num_triples,
-        error_rate=None,
+        **kwargs,
     )
 
     # instantiate filterer for further tests
@@ -145,7 +155,7 @@ def benchmark_filterer(
     for key, value in dataset.factory_dict.items():
         # measure inference time
         timer = TorchTimer(
-            stmt="filterer.contains(batch=mapped_triples)",
+            stmt="filterer(mapped_triples)",
             globals=dict(
                 filterer=filterer,
                 mapped_triples=value.mapped_triples,
@@ -154,12 +164,14 @@ def benchmark_filterer(
         measurement = timer.blocked_autorange()
 
         # check for correctness
-        error_rate = float(filterer.contains(batch=value.mapped_triples).float().mean().item())
+        error_rate = float((~filterer(value.mapped_triples)[1]).float().mean().item())
         yield dict(
             operation="inference",
+            subset=key,
             time=measurement.median,
             num_triples=value.num_triples,
-            error_rate=error_rate,
+            observed_error_rate=error_rate,
+            **kwargs,
         )
 
 
