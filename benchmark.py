@@ -1,4 +1,3 @@
-import itertools as itt
 import pathlib
 import timeit
 from typing import Any, Iterable, Mapping, Optional
@@ -27,7 +26,6 @@ LOOKUP_TIME_PLOT_SVG_PATH = CHARTS.joinpath('lookup_times.svg')
 LOOKUP_TIME_PLOT_PNG_PATH = CHARTS.joinpath('lookup_times.png')
 
 DEFAULT_PRECISION = 5
-DEFAULT_TRIALS = 10
 
 #: Datasets to benchmark. Only pick pre-stratified ones
 datasets = [
@@ -51,11 +49,10 @@ error_rates = [1.0, 0.8, 0.6, 0.5, 0.2, 0.1, 0.01, 0.001, 0.0001, 0.00001]
 
 @click.command()
 @click.option('--force', is_flag=True)
-@click.option('--trials', type=int, default=DEFAULT_TRIALS, show_default=True)
 @click.option('--precision', type=int, default=DEFAULT_PRECISION, show_default=True)
-def main(force: bool, trials: int, precision: int):
+def main(force: bool, precision: int):
     """Benchmark performance of the bloom filterer."""
-    df = get_df(force=force, trials=trials, precision=precision)
+    df = get_df(force=force, precision=precision)
     plot_errors(df)
     plot_size(df)
     plot_creation_time(df)
@@ -175,12 +172,10 @@ def benchmark_filterer(
         )
 
 
-def get_df(force: bool = False, trials: Optional[int] = None, precision: Optional[int] = None):
+def get_df(force: bool = False, precision: Optional[int] = None):
     if RESULTS_PATH.is_file() and not force:
         return pd.read_csv(RESULTS_PATH, sep='\t')
 
-    if trials is None:
-        trials = DEFAULT_TRIALS
     if precision is None:
         precision = DEFAULT_PRECISION
 
@@ -190,12 +185,11 @@ def get_df(force: bool = False, trials: Optional[int] = None, precision: Optiona
         dataset = get_dataset(dataset=dataset)
         outer_it.set_postfix({'dataset': dataset.get_normalized_name()})
         inner_it = tqdm(
-            itt.product(error_rates, range(trials)),
-            desc='Trials',
-            total=len(error_rates) * trials,
+            error_rates,
+            desc='Error Rates',
             leave=False,
         )
-        for error_rate, trial in inner_it:
+        for error_rate in inner_it:
             inner_it.set_postfix({'er': error_rate})
             # measure creation (=indexing) time
             timer = timeit.Timer(
@@ -215,7 +209,6 @@ def get_df(force: bool = False, trials: Optional[int] = None, precision: Optiona
                 'testing_triples': dataset.testing.num_triples,
                 'validation_triples': dataset.validation.num_triples,
                 'total_triples': sum(tf.num_triples for tf in dataset.factory_dict.values()),
-                'trial': trial,
                 'error_rate': error_rate,
                 'time': end_time,
                 'size': filterer.bit_array.numel(),
