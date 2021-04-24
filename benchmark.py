@@ -68,6 +68,9 @@ def plot_errors(df: pd.DataFrame):
     axes[1].set_title('Validation')
     for axis in axes.ravel():
         axis.set_xscale('log')
+        # When switching to log scale, it's easier to see the linear relationship,
+        # but the missing values and 0 values become a problem
+        # axis.set_yscale('log')
         axis.set_xlabel('Bloom Filter Error Rate')
     fig.tight_layout()
     fig.savefig(ERROR_PLOT_SVG_PATH)
@@ -83,6 +86,7 @@ def plot_lookup_times(df: pd.DataFrame):
     axes[1].set_title('Validation')
     for axis in axes.ravel():
         axis.set_xscale('log')
+        axis.set_yscale('log')
         axis.set_xlabel('Bloom Filter Error Rate')
     fig.tight_layout()
     fig.savefig(LOOKUP_TIME_PLOT_SVG_PATH)
@@ -96,6 +100,7 @@ def plot_size(df: pd.DataFrame):
     axes[0].set_ylabel('Size (bytes)')
     for axis in axes.ravel():
         axis.set_xscale('log')
+        axis.set_yscale('log')
     fig.tight_layout()
     fig.savefig(SIZE_PLOT_SVG_PATH)
     fig.savefig(SIZE_PLOT_PNG_PATH, dpi=300)
@@ -108,6 +113,7 @@ def plot_creation_time(df: pd.DataFrame):
     axes[0].set_ylabel('Creation Time (s)')
     for axis in axes.ravel():
         axis.set_xscale('log')
+        axis.set_yscale('log')
     fig.tight_layout()
     fig.savefig(CREATION_TIME_PLOT_SVG_PATH)
     fig.savefig(CREATION_TIME_PLOT_PNG_PATH, dpi=300)

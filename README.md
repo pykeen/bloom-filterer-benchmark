@@ -20,6 +20,6 @@ nominal error rate increases, except there's some funny activity as it approache
 <img src="charts/creation_times.svg" />
 
 The size of the bloom filter increases with larger number of training triples, but also varies exponentially with the
-error rate.
+error rate. The relationship is `log(time) ~ log(triples) + log(error rate)`.
 
 <img src="charts/sizes.svg" />
