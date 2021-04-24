@@ -162,9 +162,18 @@ def get_df(force: bool = False, trials: Optional[int] = None, precision: Optiona
                 'natural_size': humanize.naturalsize(filterer.bit_array.numel() / 8),
             }
             for key, value in dataset.factory_dict.items():
-                start_time = time.time()
+                # measure inference time
+                timer = timeit.Timer(
+                    stmt="filterer.contains(batch=mapped_triples)",
+                    globals=dict(
+                        filterer=filterer,
+                        mapped_triples=value.mapped_triples,
+                    )
+                )
+                repetitions, total_time = timer.autorange()
+                end_time = total_time / repetitions
+                # check for correctness
                 res = round(float(filterer.contains(batch=value.mapped_triples).float().mean()), precision)
-                end_time = time.time() - start_time
                 row[key] = res
                 row[f'{key}_time'] = end_time
 
