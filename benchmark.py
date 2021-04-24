@@ -1,6 +1,7 @@
 import os
 from typing import Optional
 
+import click
 import humanize
 import matplotlib.pyplot as plt
 import pandas as pd
@@ -34,7 +35,10 @@ datasets = [
 error_rates = [1.0, 0.6, 0.5, 0.2, 0.1, 0.01, 0.001, 0.0001, 0.00001]
 
 
-def main(force: bool = False, precision: Optional[int] = None):
+@click.command()
+@click.option('--force', is_flag=True)
+@click.option('--precision', type=int, default=DEFAULT_PRECISION, show_default=True)
+def main(force: bool, precision: int):
     """Benchmark performance of the bloom filterer."""
     df = get_df(force=force, precision=precision)
     plot_df(df)
