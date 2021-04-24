@@ -33,7 +33,7 @@ datasets = [
     'DBpedia50',
 ]
 #: Error rates to check
-error_rates = [1.0, 0.6, 0.5, 0.2, 0.1, 0.01, 0.001, 0.0001, 0.00001]
+error_rates = [1.0, 0.8, 0.6, 0.5, 0.2, 0.1, 0.01, 0.001, 0.0001, 0.00001]
 
 
 @click.command()
