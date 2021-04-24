@@ -11,7 +11,8 @@ from pykeen.sampling.filtering import BloomFilterer
 
 HERE = os.path.abspath(os.path.dirname(__file__))
 RESULTS_PATH = os.path.join(HERE, 'results.tsv')
-PLOT_PATH = os.path.join(HERE, 'plot.svg')
+PLOT_SVG_PATH = os.path.join(HERE, 'plot.svg')
+PLOT_PNG_PATH = os.path.join(HERE, 'plot.png')
 
 DEFAULT_PRECISION = 5
 
@@ -56,7 +57,8 @@ def plot_df(df: pd.DataFrame):
         axis.set_xscale('log')
         axis.set_xlabel('Bloom Filter Error Rate')
     fig.tight_layout()
-    fig.savefig(PLOT_PATH)
+    fig.savefig(PLOT_SVG_PATH)
+    fig.savefig(PLOT_PNG_PATH, dpi=300)
 
 
 def get_df(force: bool = False, precision: Optional[int] = None):
