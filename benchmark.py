@@ -73,7 +73,7 @@ def get_df(force: bool = False, precision: Optional[int] = None):
         dataset = get_dataset(dataset=dataset)
         for error_rate in error_rates:
             filterer = BloomFilterer(triples_factory=dataset.training, error_rate=error_rate)
-            print(dataset.get_normalized_name(), error_rate, filterer)
+            # print(dataset.get_normalized_name(), error_rate, filterer)
             row = {
                 key: round(float(filterer.contains(batch=value.mapped_triples).float().mean()), precision)
                 for key, value in dataset.factory_dict.items()
