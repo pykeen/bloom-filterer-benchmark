@@ -199,10 +199,10 @@ def get_df(force: bool = False, trials: Optional[int] = None, precision: Optiona
             inner_it.set_postfix({'er': error_rate})
             # measure creation (=indexing) time
             timer = timeit.Timer(
-                stmt="BloomFilterer(triples_factory=factory, error_rate=error_rate)",
+                stmt="filterer_cls(triples_factory=triples_factory, error_rate=error_rate)",
                 globals=dict(
-                    BloomFilterer=BloomFilterer,
-                    factory=dataset.training,
+                    filterer_cls=BloomFilterer,
+                    triples_factory=dataset.training,
                     error_rate=error_rate,
                 )
             )
