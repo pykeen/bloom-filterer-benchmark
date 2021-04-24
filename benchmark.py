@@ -41,7 +41,7 @@ def main(force: bool = False, precision: Optional[int] = None):
 
 
 def plot_df(df: pd.DataFrame):
-    fig, axes = plt.subplots(nrows=1, ncols=2, figsize=(12, 6), sharex='all', sharey='all')
+    fig, axes = plt.subplots(nrows=1, ncols=2, figsize=(12, 5), sharex='all', sharey='all')
     sns.lineplot(data=df, x="error_rate", y="testing", hue='dataset', ax=axes[0])
     sns.lineplot(data=df, x="error_rate", y="validation", hue='dataset', ax=axes[1])
 
