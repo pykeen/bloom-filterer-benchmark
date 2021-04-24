@@ -1,4 +1,6 @@
+import itertools as itt
 import os
+import time
 from typing import Optional
 
 import click
@@ -8,6 +10,7 @@ import pandas as pd
 import seaborn as sns
 from pykeen.datasets import get_dataset
 from pykeen.sampling.filtering import BloomFilterer
+from tqdm import tqdm
 
 HERE = os.path.abspath(os.path.dirname(__file__))
 RESULTS_PATH = os.path.join(HERE, 'results.tsv')
@@ -15,6 +18,7 @@ PLOT_SVG_PATH = os.path.join(HERE, 'plot.svg')
 PLOT_PNG_PATH = os.path.join(HERE, 'plot.png')
 
 DEFAULT_PRECISION = 5
+DEFAULT_TRIALS = 10
 
 #: Datasets to benchmark. Only pick pre-stratified ones
 datasets = [
@@ -38,10 +42,11 @@ error_rates = [1.0, 0.8, 0.6, 0.5, 0.2, 0.1, 0.01, 0.001, 0.0001, 0.00001]
 
 @click.command()
 @click.option('--force', is_flag=True)
+@click.option('--trials', type=int, default=DEFAULT_TRIALS, show_default=True)
 @click.option('--precision', type=int, default=DEFAULT_PRECISION, show_default=True)
-def main(force: bool, precision: int):
+def main(force: bool, trials: int, precision: int):
     """Benchmark performance of the bloom filterer."""
-    df = get_df(force=force, precision=precision)
+    df = get_df(force=force, trials=trials, precision=precision)
     plot_df(df)
 
 
@@ -61,31 +66,49 @@ def plot_df(df: pd.DataFrame):
     fig.savefig(PLOT_PNG_PATH, dpi=300)
 
 
-def get_df(force: bool = False, precision: Optional[int] = None):
+def get_df(force: bool = False, trials: Optional[int] = None, precision: Optional[int] = None):
     if os.path.exists(RESULTS_PATH) and not force:
         return pd.read_csv(RESULTS_PATH, sep='\t')
 
+    if trials is None:
+        trials = DEFAULT_TRIALS
     if precision is None:
         precision = DEFAULT_PRECISION
 
     rows = []
-    for dataset in datasets:
+    outer_it = tqdm(datasets, desc='Datasets')
+    for dataset in outer_it:
         dataset = get_dataset(dataset=dataset)
-        for error_rate in error_rates:
+        outer_it.set_postfix({'dataset': dataset.get_normalized_name()})
+        inner_it = tqdm(
+            itt.product(error_rates, range(trials)),
+            desc='Trials',
+            total=len(error_rates) * trials,
+            leave=False,
+        )
+        for error_rate, trial in inner_it:
+            inner_it.set_postfix({'er': error_rate})
+            start_time = time.time()
             filterer = BloomFilterer(triples_factory=dataset.training, error_rate=error_rate)
+            end_time = time.time() - start_time
             # print(dataset.get_normalized_name(), error_rate, filterer)
             row = {
-                key: round(float(filterer.contains(batch=value.mapped_triples).float().mean()), precision)
-                for key, value in dataset.factory_dict.items()
-            }
-            row.update({
+                'trial': trial,
                 'error_rate': error_rate,
                 'dataset': dataset.get_normalized_name(),
                 'size': filterer.bit_array.numel(),
+                'build_time': end_time,
                 'training_triples': dataset.training.num_triples,
                 'total_triples': sum(tf.num_triples for tf in dataset.factory_dict.values()),
                 'natural_size': humanize.naturalsize(filterer.bit_array.numel() / 8),
-            })
+            }
+            for key, value in dataset.factory_dict.items():
+                start_time = time.time()
+                res = round(float(filterer.contains(batch=value.mapped_triples).float().mean()), precision)
+                end_time = time.time() - start_time
+                row[key] = res
+                row[f'{key}_time'] = end_time
+
             rows.append(row)
 
     df = pd.DataFrame(rows)
