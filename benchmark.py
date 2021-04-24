@@ -1,15 +1,17 @@
 import itertools as itt
 import pathlib
 import timeit
-from typing import Optional
+from typing import Any, Iterable, Mapping, Optional
 
 import click
 import humanize
 import matplotlib.pyplot as plt
 import pandas as pd
 import seaborn as sns
-from pykeen.datasets import get_dataset
-from pykeen.sampling.filtering import BloomFilterer
+from class_resolver import Hint
+from pykeen.datasets import Dataset, get_dataset
+from pykeen.sampling.filtering import BloomFilterer, Filterer, filterer_resolver
+from torch.utils.benchmark import Timer as TorchTimer
 from tqdm import tqdm
 
 HERE = pathlib.Path(__file__).parent
@@ -112,6 +114,53 @@ def plot_creation_time(df: pd.DataFrame):
     fig.tight_layout()
     fig.savefig(CREATION_TIME_PLOT_SVG_PATH)
     fig.savefig(CREATION_TIME_PLOT_PNG_PATH, dpi=300)
+
+
+def benchmark_filterer(
+    dataset: Dataset,
+    filterer: Hint[Filterer],
+    filterer_kwargs: Optional[Mapping[str, Any]] = None,
+) -> Iterable[Mapping[str, Any]]:
+    """Benchmark a filterer."""
+    # measure creation (=indexing) time
+    filterer_cls = filterer_resolver.lookup(filterer)
+    timer = TorchTimer(
+        stmt="filterer_cls(triples_factory=factory, **kwargs)",
+        globals=dict(
+            filterer_cls=filterer_cls,
+            factory=dataset.training,
+            kwargs=filterer_kwargs,
+        )
+    )
+    measurement = timer.blocked_autorange()
+    yield dict(
+        operation="index",
+        time=measurement.median,
+        num_triples=dataset.training.num_triples,
+        error_rate=None,
+    )
+
+    # instantiate filterer for further tests
+    filterer = filterer_resolver.make(filterer, pos_kwargs=filterer_kwargs, triples_factory=dataset.training)
+    for key, value in dataset.factory_dict.items():
+        # measure inference time
+        timer = TorchTimer(
+            stmt="filterer.contains(batch=mapped_triples)",
+            globals=dict(
+                filterer=filterer,
+                mapped_triples=value.mapped_triples,
+            )
+        )
+        measurement = timer.blocked_autorange()
+
+        # check for correctness
+        error_rate = float(filterer.contains(batch=value.mapped_triples).float().mean().item())
+        yield dict(
+            operation="inference",
+            time=measurement.median,
+            num_triples=value.num_triples,
+            error_rate=error_rate,
+        )
 
 
 def get_df(force: bool = False, trials: Optional[int] = None, precision: Optional[int] = None):
