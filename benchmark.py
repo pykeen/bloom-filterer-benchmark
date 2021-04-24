@@ -1,6 +1,7 @@
 import itertools as itt
 import os
 import time
+import timeit
 from typing import Optional
 
 import click
@@ -136,9 +137,18 @@ def get_df(force: bool = False, trials: Optional[int] = None, precision: Optiona
         )
         for error_rate, trial in inner_it:
             inner_it.set_postfix({'er': error_rate})
-            start_time = time.time()
+            # measure creation (=indexing) time
+            timer = timeit.Timer(
+                stmt="BloomFilterer(triples_factory=factory, error_rate=error_rate)",
+                globals=dict(
+                    BloomFilterer=BloomFilterer,
+                    factory=dataset.training,
+                    error_rate=error_rate,
+                )
+            )
+            repetitions, total_time = timer.autorange()
+            end_time = total_time / repetitions
             filterer = BloomFilterer(triples_factory=dataset.training, error_rate=error_rate)
-            end_time = time.time() - start_time
             row = {
                 'dataset': dataset.get_normalized_name(),
                 'training_triples': dataset.training.num_triples,
