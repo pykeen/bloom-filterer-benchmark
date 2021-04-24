@@ -14,8 +14,12 @@ from tqdm import tqdm
 
 HERE = os.path.abspath(os.path.dirname(__file__))
 RESULTS_PATH = os.path.join(HERE, 'results.tsv')
-PLOT_SVG_PATH = os.path.join(HERE, 'plot.svg')
-PLOT_PNG_PATH = os.path.join(HERE, 'plot.png')
+ERROR_PLOT_SVG_PATH = os.path.join(HERE, 'errors.svg')
+ERROR_PLOT_PNG_PATH = os.path.join(HERE, 'errors.png')
+SIZE_PLOT_SVG_PATH = os.path.join(HERE, 'sizes.svg')
+SIZE_PLOT_PNG_PATH = os.path.join(HERE, 'sizes.png')
+TIME_PLOT_SVG_PATH = os.path.join(HERE, 'times.svg')
+TIME_PLOT_PNG_PATH = os.path.join(HERE, 'times.png')
 
 DEFAULT_PRECISION = 5
 DEFAULT_TRIALS = 10
@@ -47,10 +51,12 @@ error_rates = [1.0, 0.8, 0.6, 0.5, 0.2, 0.1, 0.01, 0.001, 0.0001, 0.00001]
 def main(force: bool, trials: int, precision: int):
     """Benchmark performance of the bloom filterer."""
     df = get_df(force=force, trials=trials, precision=precision)
-    plot_df(df)
+    plot_errors(df)
+    plot_global(df)
+    plot_times(df)
 
 
-def plot_df(df: pd.DataFrame):
+def plot_errors(df: pd.DataFrame):
     fig, axes = plt.subplots(nrows=1, ncols=2, figsize=(12, 5), sharex='all', sharey='all')
     sns.lineplot(data=df, x="error_rate", y="testing", hue='dataset', ax=axes[0])
     sns.lineplot(data=df, x="error_rate", y="validation", hue='dataset', ax=axes[1])
@@ -62,8 +68,37 @@ def plot_df(df: pd.DataFrame):
         axis.set_xscale('log')
         axis.set_xlabel('Bloom Filter Error Rate')
     fig.tight_layout()
-    fig.savefig(PLOT_SVG_PATH)
-    fig.savefig(PLOT_PNG_PATH, dpi=300)
+    fig.savefig(ERROR_PLOT_SVG_PATH)
+    fig.savefig(ERROR_PLOT_PNG_PATH, dpi=300)
+
+
+def plot_times(df: pd.DataFrame):
+    fig, axes = plt.subplots(nrows=1, ncols=2, figsize=(12, 5), sharex='all', sharey='all')
+    sns.lineplot(data=df, x="error_rate", y="testing_time", hue='dataset', ax=axes[0])
+    sns.lineplot(data=df, x="error_rate", y="validation_time", hue='dataset', ax=axes[1])
+
+    axes[0].set_ylabel('Time')
+    axes[0].set_title('Testing')
+    axes[1].set_title('Validation')
+    for axis in axes.ravel():
+        axis.set_xscale('log')
+        axis.set_xlabel('Bloom Filter Error Rate')
+    fig.tight_layout()
+    fig.savefig(TIME_PLOT_SVG_PATH)
+    fig.savefig(TIME_PLOT_PNG_PATH, dpi=300)
+
+
+def plot_global(df: pd.DataFrame):
+    fig, axes = plt.subplots(nrows=1, ncols=2, figsize=(12, 5))
+    sns.scatterplot(data=df, x="training_triples", y="size", hue='dataset', ax=axes[0])
+    sns.lineplot(data=df, x="error_rate", y="time", hue='dataset', ax=axes[1])
+    axes[0].set_title('Size of the Bloom Filter')
+    axes[1].set_title('Time for Creation of the Bloom Filter')
+    for axis in axes.ravel():
+        axis.set_xscale('log')
+    fig.tight_layout()
+    fig.savefig(SIZE_PLOT_SVG_PATH)
+    fig.savefig(SIZE_PLOT_PNG_PATH, dpi=300)
 
 
 def get_df(force: bool = False, trials: Optional[int] = None, precision: Optional[int] = None):
@@ -91,15 +126,16 @@ def get_df(force: bool = False, trials: Optional[int] = None, precision: Optiona
             start_time = time.time()
             filterer = BloomFilterer(triples_factory=dataset.training, error_rate=error_rate)
             end_time = time.time() - start_time
-            # print(dataset.get_normalized_name(), error_rate, filterer)
             row = {
+                'dataset': dataset.get_normalized_name(),
+                'training_triples': dataset.training.num_triples,
+                'testing_triples': dataset.testing.num_triples,
+                'validation_triples': dataset.validation.num_triples,
+                'total_triples': sum(tf.num_triples for tf in dataset.factory_dict.values()),
                 'trial': trial,
                 'error_rate': error_rate,
-                'dataset': dataset.get_normalized_name(),
+                'time': end_time,
                 'size': filterer.bit_array.numel(),
-                'build_time': end_time,
-                'training_triples': dataset.training.num_triples,
-                'total_triples': sum(tf.num_triples for tf in dataset.factory_dict.values()),
                 'natural_size': humanize.naturalsize(filterer.bit_array.numel() / 8),
             }
             for key, value in dataset.factory_dict.items():

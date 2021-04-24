@@ -9,4 +9,13 @@ isn't a large size-dependence on the relationship between the bloom filter's
 `error_rate` parameter and the actual error observed on either the testing
 or validation sets.
 
-<img src="plot.svg" />
+<img src="errors.svg" />
+
+As expected, the time for checking the triples decreases with an increased nominal
+error rate.
+
+<img src="times.svg" />
+
+Global attributes of the bloom filter.
+
+<img src="sizes.svg" />
