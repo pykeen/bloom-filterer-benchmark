@@ -18,8 +18,10 @@ ERROR_PLOT_SVG_PATH = os.path.join(HERE, 'errors.svg')
 ERROR_PLOT_PNG_PATH = os.path.join(HERE, 'errors.png')
 SIZE_PLOT_SVG_PATH = os.path.join(HERE, 'sizes.svg')
 SIZE_PLOT_PNG_PATH = os.path.join(HERE, 'sizes.png')
-TIME_PLOT_SVG_PATH = os.path.join(HERE, 'times.svg')
-TIME_PLOT_PNG_PATH = os.path.join(HERE, 'times.png')
+CREATION_TIME_PLOT_SVG_PATH = os.path.join(HERE, 'creation_times.svg')
+CREATION_TIME_PLOT_PNG_PATH = os.path.join(HERE, 'creation_times.png')
+LOOKUP_TIME_PLOT_SVG_PATH = os.path.join(HERE, 'lookup_times.svg')
+LOOKUP_TIME_PLOT_PNG_PATH = os.path.join(HERE, 'lookup_times.png')
 
 DEFAULT_PRECISION = 5
 DEFAULT_TRIALS = 10
@@ -52,15 +54,15 @@ def main(force: bool, trials: int, precision: int):
     """Benchmark performance of the bloom filterer."""
     df = get_df(force=force, trials=trials, precision=precision)
     plot_errors(df)
-    plot_global(df)
-    plot_times(df)
+    plot_size(df)
+    plot_creation_time(df)
+    plot_lookup_times(df)
 
 
 def plot_errors(df: pd.DataFrame):
     fig, axes = plt.subplots(nrows=1, ncols=2, figsize=(12, 5), sharex='all', sharey='all')
     sns.lineplot(data=df, x="error_rate", y="testing", hue='dataset', ax=axes[0])
     sns.lineplot(data=df, x="error_rate", y="validation", hue='dataset', ax=axes[1])
-
     axes[0].set_ylabel('Observed Error Rate')
     axes[0].set_title('Testing')
     axes[1].set_title('Validation')
@@ -72,33 +74,46 @@ def plot_errors(df: pd.DataFrame):
     fig.savefig(ERROR_PLOT_PNG_PATH, dpi=300)
 
 
-def plot_times(df: pd.DataFrame):
+def plot_lookup_times(df: pd.DataFrame):
     fig, axes = plt.subplots(nrows=1, ncols=2, figsize=(12, 5), sharex='all', sharey='all')
     sns.lineplot(data=df, x="error_rate", y="testing_time", hue='dataset', ax=axes[0])
     sns.lineplot(data=df, x="error_rate", y="validation_time", hue='dataset', ax=axes[1])
-
-    axes[0].set_ylabel('Time')
+    axes[0].set_ylabel('Lookup Time (s)')
     axes[0].set_title('Testing')
     axes[1].set_title('Validation')
     for axis in axes.ravel():
         axis.set_xscale('log')
         axis.set_xlabel('Bloom Filter Error Rate')
     fig.tight_layout()
-    fig.savefig(TIME_PLOT_SVG_PATH)
-    fig.savefig(TIME_PLOT_PNG_PATH, dpi=300)
+    fig.savefig(LOOKUP_TIME_PLOT_SVG_PATH)
+    fig.savefig(LOOKUP_TIME_PLOT_PNG_PATH, dpi=300)
 
 
-def plot_global(df: pd.DataFrame):
-    fig, axes = plt.subplots(nrows=1, ncols=2, figsize=(12, 5))
+def plot_size(df: pd.DataFrame):
+    fig, axes = plt.subplots(nrows=1, ncols=2, figsize=(12, 5), sharey='all')
     sns.scatterplot(data=df, x="training_triples", y="size", hue='dataset', ax=axes[0])
-    sns.lineplot(data=df, x="error_rate", y="time", hue='dataset', ax=axes[1])
+    sns.lineplot(data=df, x="error_rate", y="size", hue='dataset', ax=axes[1])
+    axes[0].set_ylabel('Creation Time (s)')
     axes[0].set_title('Size of the Bloom Filter')
-    axes[1].set_title('Time for Creation of the Bloom Filter')
+    axes[1].set_title('Size of the Bloom Filter')
     for axis in axes.ravel():
         axis.set_xscale('log')
     fig.tight_layout()
     fig.savefig(SIZE_PLOT_SVG_PATH)
     fig.savefig(SIZE_PLOT_PNG_PATH, dpi=300)
+
+
+def plot_creation_time(df: pd.DataFrame):
+    fig, axes = plt.subplots(nrows=1, ncols=2, figsize=(12, 5), sharey='all')
+    sns.scatterplot(data=df, x="training_triples", y="time", hue='dataset', ax=axes[0])
+    sns.lineplot(data=df, x="error_rate", y="time", hue='dataset', ax=axes[1])
+    axes[0].set_title('Time for Creation of the Bloom Filter')
+    axes[1].set_title('Time for Creation of the Bloom Filter')
+    for axis in axes.ravel():
+        axis.set_xscale('log')
+    fig.tight_layout()
+    fig.savefig(CREATION_TIME_PLOT_SVG_PATH)
+    fig.savefig(CREATION_TIME_PLOT_PNG_PATH, dpi=300)
 
 
 def get_df(force: bool = False, trials: Optional[int] = None, precision: Optional[int] = None):

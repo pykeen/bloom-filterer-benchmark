@@ -14,8 +14,12 @@ or validation sets.
 As expected, the time for checking the triples decreases with an increased nominal
 error rate.
 
-<img src="times.svg" />
+<img src="lookup_times.svg" />
 
-Global attributes of the bloom filter.
+Creation times
+
+<img src="creation_times.svg" />
+
+Sizes
 
 <img src="sizes.svg" />
