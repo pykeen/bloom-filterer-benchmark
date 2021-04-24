@@ -186,10 +186,7 @@ def get_df(force: bool = False, precision: Optional[int] = None):
         precision = DEFAULT_PRECISION
 
     rows = []
-    outer_it = tqdm(datasets, desc='Datasets')
-    for dataset in outer_it:
-        dataset = get_dataset(dataset=dataset)
-        outer_it.set_postfix({'dataset': dataset.get_normalized_name()})
+    for dataset in iter_datasets():
         inner_it = tqdm(
             error_rates,
             desc='Error Rates',
@@ -241,6 +238,14 @@ def get_df(force: bool = False, precision: Optional[int] = None):
     df = pd.DataFrame(rows)
     df.to_csv(RESULTS_PATH, sep='\t', index=False)
     return df
+
+
+def iter_datasets() -> Iterable[Dataset]:
+    it = tqdm(datasets, desc='Datasets')
+    for dataset in it:
+        dataset_instance = get_dataset(dataset=dataset)
+        it.set_postfix(dataset=dataset_instance.get_normalized_name())
+        yield dataset_instance
 
 
 if __name__ == '__main__':
