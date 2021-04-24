@@ -14,14 +14,15 @@ from tqdm import tqdm
 
 HERE = os.path.abspath(os.path.dirname(__file__))
 RESULTS_PATH = os.path.join(HERE, 'results.tsv')
-ERROR_PLOT_SVG_PATH = os.path.join(HERE, 'errors.svg')
-ERROR_PLOT_PNG_PATH = os.path.join(HERE, 'errors.png')
-SIZE_PLOT_SVG_PATH = os.path.join(HERE, 'sizes.svg')
-SIZE_PLOT_PNG_PATH = os.path.join(HERE, 'sizes.png')
-CREATION_TIME_PLOT_SVG_PATH = os.path.join(HERE, 'creation_times.svg')
-CREATION_TIME_PLOT_PNG_PATH = os.path.join(HERE, 'creation_times.png')
-LOOKUP_TIME_PLOT_SVG_PATH = os.path.join(HERE, 'lookup_times.svg')
-LOOKUP_TIME_PLOT_PNG_PATH = os.path.join(HERE, 'lookup_times.png')
+CHARTS = os.path.join(HERE, 'charts')
+ERROR_PLOT_SVG_PATH = os.path.join(CHARTS, 'errors.svg')
+ERROR_PLOT_PNG_PATH = os.path.join(CHARTS, 'errors.png')
+SIZE_PLOT_SVG_PATH = os.path.join(CHARTS, 'sizes.svg')
+SIZE_PLOT_PNG_PATH = os.path.join(CHARTS, 'sizes.png')
+CREATION_TIME_PLOT_SVG_PATH = os.path.join(CHARTS, 'creation_times.svg')
+CREATION_TIME_PLOT_PNG_PATH = os.path.join(CHARTS, 'creation_times.png')
+LOOKUP_TIME_PLOT_SVG_PATH = os.path.join(CHARTS, 'lookup_times.svg')
+LOOKUP_TIME_PLOT_PNG_PATH = os.path.join(CHARTS, 'lookup_times.png')
 
 DEFAULT_PRECISION = 5
 DEFAULT_TRIALS = 10
