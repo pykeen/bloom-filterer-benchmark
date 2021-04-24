@@ -91,7 +91,7 @@ def plot_lookup_times(df: pd.DataFrame):
 
 def plot_size(df: pd.DataFrame):
     fig, axes = plt.subplots(nrows=1, ncols=2, figsize=(12, 5), sharey='all')
-    sns.scatterplot(data=df, x="training_triples", y="size", hue='dataset', ax=axes[0])
+    sns.scatterplot(data=df, x="training_triples", y="size", hue='error_rate', ax=axes[0])
     sns.lineplot(data=df, x="error_rate", y="size", hue='dataset', ax=axes[1])
     axes[0].set_ylabel('Size (bytes)')
     for axis in axes.ravel():
@@ -103,7 +103,7 @@ def plot_size(df: pd.DataFrame):
 
 def plot_creation_time(df: pd.DataFrame):
     fig, axes = plt.subplots(nrows=1, ncols=2, figsize=(12, 5), sharey='all')
-    sns.scatterplot(data=df, x="training_triples", y="time", hue='dataset', ax=axes[0])
+    sns.scatterplot(data=df, x="training_triples", y="time", hue='error_rate', ax=axes[0])
     sns.lineplot(data=df, x="error_rate", y="time", hue='dataset', ax=axes[1])
     axes[0].set_ylabel('Creation Time (s)')
     for axis in axes.ravel():
