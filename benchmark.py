@@ -151,7 +151,6 @@ def plot_comparison_setup(df: pd.DataFrame):
         style='filterer',
         style_order=HUE_ORDER,
         ax=axes,
-        size=8,
         alpha=0.8,
     )
     axes.set_ylabel('Index Time (s)')
