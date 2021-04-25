@@ -1,12 +1,20 @@
 # bloom-filterer-benchmark
 
-The bloom filterer was introduced in [PyKEEN #401](https://github.com/pykeen/pykeen/pull/401)
-by Max Berrendorf ([@mberr](https://github.com/mberr)) because the exact algorithm for filtering false negative samples
-during training was slow, and an approximation algorithm could do an adequate job while having huge memory and time
-improvements.
+Negative sampling is necessary during training of knowledge graph embedding models because knowledge graphs typically
+only have positive examples. Unfortunately, negative sampling techniques often produce false negatives that are actually
+already in the knowledge graph. Sometimes this isn't a big deal, depending on the dataset, model, and learning task.
+PyKEEN provides the ability to filter false negatives using an exact algorithm, but it's quite slow.
 
-The code and artifacts for this benchmarking is available on
-[GitHub](https://github.com/pykeen/bloom-filterer-benchmark). It can be rerun with `python benchmark.py --force`.
+An alternative filterer based on an approximation algorithm called the
+[bloom filter](https://en.wikipedia.org/wiki/Bloom_filter) was introduced in
+[PyKEEN #401](https://github.com/pykeen/pykeen/pull/401) by Max Berrendorf ([@mberr](https://github.com/mberr)).
+We then did this benchmarking study to show that it both makes a huge time improvement while maintaining a low
+error rate.
+
+The code and artifacts are available on [GitHub](https://github.com/pykeen/bloom-filterer-benchmark). 
+It can be rerun with `python benchmark.py --force`.  A tutorial on how to enable the "filtered setting"
+as well as specifics on the exact filterer and the bloom filterer are available on
+[Read the Docs](https://pykeen.readthedocs.io/en/latest/reference/negative_sampling.html).
 
 ## Benchmarking
 
