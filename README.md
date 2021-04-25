@@ -40,24 +40,29 @@ error rate. The relationship is `log(time) ~ log(triples) + log(error rate)`.
 
 ## Comparison
 
-The bloom filterer is compared to two exact implementations using Python sets and PyTorch (default). Several error rates
+The bloom filterer is compared the exact implementation using Python sets. Several error rates
 for the bloom filter are shown simultaneously, to show that there's a tradeoff that's possible for each.
 
-The setup times show the PyTorch implementation is the fastest.
+The setup times show the bloom filterer is faster for larger datasets, though this only has to be done once
+for any given training. The times for both implementations are sub-seconds, so they can be considered negligible.
 
 <img src="charts/comparison/setup.svg" />
 
-The Python-based implementation and some settings for the bloom filter outperform the PyTorch implementation.
+The Python-based implementation performs well on smaller datasets, but the bloom filterer clearly wins for larger
+ones. The lookup operation is repeated during training, so these times do add up.
 
 <img src="charts/comparison/lookup_times.svg" />
 
-The observed error rates were adjusted by adding `1 / number of triples` in order to make the data plottable on a log
-scale, since some error rates were zero. For smaller datasets, this adjustment is relatively large, but the run times
-overall are negligible. For larger datasets, this adjustment is negligible.
+The error rates make most sense to show on a log scale, but since the exact implementation has a constant error
+rate of zero, the log scale becomes an issue. Therefore, the error rates were all adjusted by adding
+`1 / number of triples`, which is the minimum possible error for any given lookup task. In this chart, you can
+think of the "adjusted error rate" reported for the exact algorithm as the lower bound. Note that several datapoints
+are shown for the bloom filter, which correspond to different "desired error rates" that are parameterizable
+in the code.
 
 <img src="charts/comparison/errors.svg" />
 
 The following chart shows the tradeoff between the implementations (with all error rates of the bloom filter shown)
-across all datasets.
+across all datasets. Again, think of the adjusted error rate reported for the exact algorithm as a lower bound.
 
 <img src="charts/comparison/errors_2d.svg" />
