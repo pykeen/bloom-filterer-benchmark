@@ -1,6 +1,6 @@
 import pathlib
 import timeit
-from typing import Any, Iterable, Mapping, Optional
+from typing import Any, Iterable, Mapping, Optional, Tuple
 
 import click
 import humanize
@@ -8,14 +8,19 @@ import matplotlib.pyplot as plt
 import pandas as pd
 import seaborn as sns
 from class_resolver import Hint
-from pykeen.datasets import Dataset, get_dataset
+from docdata import get_docdata
+from pykeen.datasets import Dataset, datasets as datasets_dict, get_dataset
 from pykeen.sampling.filtering import BloomFilterer, Filterer, filterer_resolver
 from torch.utils.benchmark import Timer as TorchTimer
 from tqdm import tqdm
 
 HERE = pathlib.Path(__file__).parent
 RESULTS_PATH = HERE.joinpath('results.tsv')
+COMPARISON_PATH = HERE.joinpath('comparison.tsv')
 CHARTS = HERE.joinpath('charts')
+CHARTS.mkdir(exist_ok=True)
+COMPARISON = CHARTS / 'comparison'
+COMPARISON.mkdir(exist_ok=True)
 ERROR_PLOT_SVG_PATH = CHARTS.joinpath('errors.svg')
 ERROR_PLOT_PNG_PATH = CHARTS.joinpath('errors.png')
 SIZE_PLOT_SVG_PATH = CHARTS.joinpath('sizes.svg')
@@ -27,36 +32,48 @@ LOOKUP_TIME_PLOT_PNG_PATH = CHARTS.joinpath('lookup_times.png')
 
 DEFAULT_PRECISION = 5
 
+sns.set_style('whitegrid')
+
 #: Datasets to benchmark. Only pick pre-stratified ones
 datasets = [
     'kinships',
     'nations',
     'umls',
     'countries',
-    'codex-small',
-    'codex-medium',
-    'codex-large',
+    'codexsmall',
+    'codexmedium',
+    'codexlarge',
     'fb15k',
-    'fb15k-237',
+    'fb15k237',
     'wn18',
-    'wn18-rr',
+    'wn18rr',
     'yago310',
-    'DBpedia50',
+    'dbpedia50',
 ]
+# Order by increasing number of triples
+datasets = sorted(datasets, key=lambda s: get_docdata(datasets_dict[s])['statistics']['triples'])
+
 #: Error rates to check
 error_rates = [1.0, 0.8, 0.6, 0.5, 0.2, 0.1, 0.01, 0.001, 0.0001, 0.00001]
 
 
 @click.command()
 @click.option('--force', is_flag=True)
+@click.option('--test', is_flag=True)
 @click.option('--precision', type=int, default=DEFAULT_PRECISION, show_default=True)
-def main(force: bool, precision: int):
+def main(force: bool, test: bool, precision: int):
     """Benchmark performance of the bloom filterer."""
-    df = get_df(force=force, precision=precision)
-    plot_errors(df)
-    plot_size(df)
-    plot_creation_time(df)
-    plot_lookup_times(df)
+    comparison_df = compare_filterers(test=True, force=force)  # TODO don't hard code test later
+    plot_comparison_setup(comparison_df)
+    plot_comparison_lookup_time(comparison_df)
+    plot_comparison_errors(comparison_df)
+    plot_comparison_2d(comparison_df)
+
+    bloom_benchmark_df = get_bloom_benchmark_df(force=force, precision=precision)
+    plot_errors(bloom_benchmark_df)
+    plot_size(bloom_benchmark_df)
+    plot_creation_time(bloom_benchmark_df)
+    plot_lookup_times(bloom_benchmark_df)
 
 
 def plot_errors(df: pd.DataFrame):
@@ -119,6 +136,124 @@ def plot_creation_time(df: pd.DataFrame):
     fig.savefig(CREATION_TIME_PLOT_PNG_PATH, dpi=300)
 
 
+def plot_comparison_setup(df: pd.DataFrame):
+    indexing_df = df.loc[df['operation'] == 'index', ['dataset', 'filterer', 'time']]
+
+    fig, axes = plt.subplots(figsize=(10, 5))
+    sns.stripplot(
+        data=indexing_df,
+        y='dataset',
+        x='time',
+        hue='filterer',
+        ax=axes,
+        size=8,
+        alpha=0.8,
+    )
+    axes.set_xlabel('Index Time (s)')
+    axes.set_ylabel('')
+    axes.set_xscale('log')
+    axes.set_title('Setup Time')
+
+    fig.savefig(COMPARISON / 'setup.svg')
+    fig.savefig(COMPARISON / 'setup.png', dpi=300)
+
+
+def plot_comparison_lookup_time(df: pd.DataFrame):
+    testing_df = df.loc[df['subset'] == 'testing', ['dataset', 'filterer', 'time']]
+    validation_df = df.loc[df['subset'] == 'validation', ['dataset', 'filterer', 'time']]
+
+    fig, axes = plt.subplots(1, 2, figsize=(12, 5), sharey='all')
+    sns.stripplot(data=testing_df, x='dataset', hue='filterer', y='time', dodge=True, ax=axes[0])
+    sns.stripplot(data=validation_df, x='dataset', hue='filterer', y='time', dodge=True, ax=axes[1])
+    axes[0].set_title('Testing')
+    axes[1].set_title('Validation')
+    axes[0].set_ylabel('Lookup Time (s)')
+    axes[1].set_ylabel('')
+    for ax in axes:
+        ax.set_yscale('log')
+        ax.set_xlabel('')
+    fig.tight_layout()
+    fig.savefig(COMPARISON / 'lookup_times.svg')
+    fig.savefig(COMPARISON / 'lookup_times.png', dpi=300)
+
+
+def plot_comparison_errors(df: pd.DataFrame):
+    columns = ['dataset', 'filterer', 'observed_error_rate', 'num_triples']
+    testing_df = df.loc[df['subset'] == 'testing', columns]
+    validation_df = df.loc[df['subset'] == 'validation', columns]
+
+    testing_df['adj_observed_error_rate'] = testing_df['observed_error_rate'] + 1 / testing_df['num_triples']
+    validation_df['adj_observed_error_rate'] = validation_df['observed_error_rate'] + 1 / validation_df['num_triples']
+
+    fig, axes = plt.subplots(1, 2, figsize=(12, 5), sharey='all')
+    sns.stripplot(data=testing_df, x='dataset', hue='filterer', y='adj_observed_error_rate', dodge=True, ax=axes[0])
+    sns.stripplot(data=validation_df, x='dataset', hue='filterer', y='adj_observed_error_rate', dodge=True, ax=axes[1])
+    axes[0].set_title('Testing')
+    axes[1].set_title('Validation')
+    axes[0].set_ylabel('Adjusted Observed Error Rate')
+    axes[1].set_ylabel('')
+    for ax in axes:
+        ax.set_xlabel('')
+        ax.set_yscale('log')
+    fig.tight_layout()
+    fig.savefig(COMPARISON / 'errors.svg')
+    fig.savefig(COMPARISON / 'errors.png', dpi=300)
+
+
+def plot_comparison_2d(df: pd.DataFrame):
+    columns = ['dataset', 'filterer', 'observed_error_rate', 'time', 'num_triples']
+    testing_df = df.loc[df['subset'] == 'testing', columns]
+    validation_df = df.loc[df['subset'] == 'validation', columns]
+
+    testing_df['adj_observed_error_rate'] = testing_df['observed_error_rate'] + 1 / testing_df['num_triples']
+    validation_df['adj_observed_error_rate'] = validation_df['observed_error_rate'] + 1 / validation_df['num_triples']
+
+    fig, axes = plt.subplots(1, 2, figsize=(12, 5), sharey='all')
+    sns.scatterplot(data=testing_df, y='time', hue='filterer', x='adj_observed_error_rate', ax=axes[0])
+    sns.scatterplot(data=validation_df, y='time', hue='filterer', x='adj_observed_error_rate', ax=axes[1])
+    axes[0].set_title('Testing')
+    axes[1].set_title('Validation')
+    axes[0].set_ylabel('Lookup Time (s)')
+
+    for ax in axes:
+        ax.set_yscale('log')
+        ax.set_xscale('log')
+        ax.set_xlabel('Adjusted Observed Error Rate')
+    fig.tight_layout()
+    fig.savefig(COMPARISON / 'errors_2d.svg')
+    fig.savefig(COMPARISON / 'errors_2d.png', dpi=300)
+
+
+def compare_filterers(test: bool = False, force: bool = False):
+    if COMPARISON_PATH.exists() and not force:
+        return pd.read_csv(COMPARISON_PATH, sep='\t')
+
+    rows = [
+        row
+        for dataset in iter_datasets(test=test)
+        for filterer, filterer_kwargs in iter_experiments()
+        for row in benchmark_filterer(dataset=dataset, filterer=filterer, filterer_kwargs=filterer_kwargs)
+    ]
+    df = pd.DataFrame(rows)
+    df.to_csv(COMPARISON_PATH, sep='\t', index=False)
+    return df
+
+
+def iter_experiments() -> Iterable[Tuple[str, Mapping[str, Any]]]:
+    experiments = [
+        ('default', {}),
+        ('pythonset', {}),
+        *(
+            ('bloom', dict(error_rate=error_rate))
+            for error_rate in error_rates
+        )
+    ]
+    it = tqdm(experiments, desc='Experiments', leave=False)
+    for filterer, filter_kwargs in it:
+        it.set_postfix(filterer=filterer, **filter_kwargs)
+        yield filterer, filter_kwargs
+
+
 def benchmark_filterer(
     dataset: Dataset,
     filterer: Hint[Filterer],
@@ -127,7 +262,7 @@ def benchmark_filterer(
     """Benchmark a filterer."""
     filterer_kwargs = filterer_kwargs or {}
 
-    # include some meta-data into each entry
+    # include some metadata into each entry
     kwargs = dict(
         dataset=dataset.get_normalized_name(),
         filterer=filterer,
@@ -178,7 +313,7 @@ def benchmark_filterer(
         )
 
 
-def get_df(force: bool = False, precision: Optional[int] = None):
+def get_bloom_benchmark_df(force: bool = False, precision: Optional[int] = None):
     if RESULTS_PATH.is_file() and not force:
         return pd.read_csv(RESULTS_PATH, sep='\t')
 
@@ -240,8 +375,8 @@ def get_df(force: bool = False, precision: Optional[int] = None):
     return df
 
 
-def iter_datasets() -> Iterable[Dataset]:
-    it = tqdm(datasets, desc='Datasets')
+def iter_datasets(test: bool = False) -> Iterable[Dataset]:
+    it = tqdm(datasets[:4] if test else datasets, desc='Datasets')
     for dataset in it:
         dataset_instance = get_dataset(dataset=dataset)
         it.set_postfix(dataset=dataset_instance.get_normalized_name())
