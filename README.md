@@ -1,4 +1,4 @@
-# Bloom Filterer Benchmark
+# bloom-filterer-benchmark
 
 Negative sampling is necessary during training of knowledge graph embedding models because knowledge graphs typically
 only have positive examples. Unfortunately, negative sampling techniques often produce false negatives that are actually
