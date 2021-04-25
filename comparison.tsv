@@ -1,193 +1,241 @@
 operation	subset	time	num_triples	dataset	filterer	observed_error_rate	error_rate
-index	train	1.1211479999997387e-05	8544	kinships	default		
-inference	training	0.6978681820000006	8544	kinships	default	1.0	
-inference	testing	0.039615526999999595	1074	kinships	default	1.0	
-inference	validation	0.0500208200000003	1068	kinships	default	1.0	
-index	train	0.001319925500000263	8544	kinships	pythonset		
-inference	training	0.0018330744999994764	8544	kinships	pythonset	1.0	
-inference	testing	0.00024434969999997946	1074	kinships	pythonset	0.0	
-inference	validation	0.00026868009999998495	1068	kinships	pythonset	0.0	
-index	train	0.00018182500000003544	8544	kinships	bloom		1.0
-inference	training	0.0001541229999999949	8544	kinships	bloom	1.0	1.0
-inference	testing	4.322165000000488e-05	1074	kinships	bloom	1.0	1.0
-inference	validation	4.6604514999994964e-05	1068	kinships	bloom	1.0	1.0
-index	train	0.00033411479999996275	8544	kinships	bloom		0.8
-inference	training	0.0003218796000000523	8544	kinships	bloom	1.0	0.8
-inference	testing	9.811349999999663e-05	1074	kinships	bloom	0.866852879524231	0.8
-inference	validation	9.604785000005833e-05	1068	kinships	bloom	0.8642321825027466	0.8
-index	train	0.00033645880000001684	8544	kinships	bloom		0.6
-inference	training	0.00031791155000009396	8544	kinships	bloom	1.0	0.6
-inference	testing	0.00010353710000003958	1074	kinships	bloom	0.6405959129333496	0.6
-inference	validation	0.0001039358999999962	1068	kinships	bloom	0.6029962301254272	0.6
-index	train	0.0005195651999999384	8544	kinships	bloom		0.5
-inference	training	0.00048824359999999345	8544	kinships	bloom	1.0	0.5
-inference	testing	0.00015478570000002634	1074	kinships	bloom	0.5642458200454712	0.5
-inference	validation	0.00015319959999997578	1068	kinships	bloom	0.5711610317230225	0.5
-index	train	0.0006525480000005857	8544	kinships	bloom		0.2
-inference	training	0.0006322259999986812	8544	kinships	bloom	1.0	0.2
-inference	testing	0.00024106590000005923	1074	kinships	bloom	0.2178770899772644	0.2
-inference	validation	0.00021275714999999804	1068	kinships	bloom	0.2162921279668808	0.2
-index	train	0.0007897970000003696	8544	kinships	bloom		0.1
-inference	training	0.0008421824999995664	8544	kinships	bloom	1.0	0.1
-inference	testing	0.0002611382999999634	1074	kinships	bloom	0.11731843650341034	0.1
-inference	validation	0.0002574758499999774	1068	kinships	bloom	0.09456928819417953	0.1
-index	train	0.0012476315000000682	8544	kinships	bloom		0.01
-inference	training	0.0012622489999998265	8544	kinships	bloom	1.0	0.01
-inference	testing	0.00040007770000007883	1074	kinships	bloom	0.00931098684668541	0.01
-inference	validation	0.00039944250000010226	1068	kinships	bloom	0.006554306950420141	0.01
-index	train	0.0018890830000000136	8544	kinships	bloom		0.001
-inference	training	0.001761887500000725	8544	kinships	bloom	1.0	0.001
-inference	testing	0.000551684299999966	1074	kinships	bloom	0.0009310987079516053	0.001
-inference	validation	0.0005489840500000121	1068	kinships	bloom	0.0	0.001
-index	train	0.002418956999999722	8544	kinships	bloom		0.0001
-inference	training	0.002428887000000657	8544	kinships	bloom	1.0	0.0001
-inference	testing	0.0007348349999993786	1074	kinships	bloom	0.0	0.0001
-inference	validation	0.0007546189999994013	1068	kinships	bloom	0.0	0.0001
-index	train	0.003031822000000517	8544	kinships	bloom		1e-05
-inference	training	0.002950219000000587	8544	kinships	bloom	1.0	1e-05
-inference	testing	0.0008761244999995199	1074	kinships	bloom	0.0	1e-05
-inference	validation	0.000892290499999504	1068	kinships	bloom	0.0	1e-05
-index	train	1.1386710000005351e-05	1592	nations	default		
-inference	training	0.010430272999999879	1592	nations	default	1.0	
-inference	testing	0.0012220040000006094	201	nations	default	1.0	
-inference	validation	0.001218876999999452	199	nations	default	1.0	
-index	train	0.00020957579999993924	1592	nations	pythonset		
-inference	training	0.0003219013000000714	1592	nations	pythonset	1.0	
-inference	testing	5.527133000001072e-05	201	nations	pythonset	0.0	
-inference	validation	5.45386499999978e-05	199	nations	pythonset	0.0	
-index	train	7.00326100000126e-05	1592	nations	bloom		1.0
-inference	training	4.944079999980033e-05	1592	nations	bloom	1.0	1.0
-inference	testing	2.6898679999991515e-05	201	nations	bloom	1.0	1.0
-inference	validation	2.662089000001089e-05	199	nations	bloom	1.0	1.0
-index	train	0.0001282072999998718	1592	nations	bloom		0.8
-inference	training	0.00010983730000013736	1592	nations	bloom	1.0	0.8
-inference	testing	7.013575500000257e-05	201	nations	bloom	0.8407959938049316	0.8
-inference	validation	6.875761999999952e-05	199	nations	bloom	0.839195966720581	0.8
-index	train	0.00012700209999998434	1592	nations	bloom		0.6
-inference	training	0.00010917249999984336	1592	nations	bloom	1.0	0.6
-inference	testing	6.935224999988777e-05	201	nations	bloom	0.5472636818885803	0.6
-inference	validation	7.044548999999733e-05	199	nations	bloom	0.5979899764060974	0.6
-index	train	0.00017743279999997695	1592	nations	bloom		0.5
-inference	training	0.0001618713999999244	1592	nations	bloom	1.0	0.5
-inference	testing	0.00010451324999998235	201	nations	bloom	0.5273631811141968	0.5
-inference	validation	0.00010557424999984022	199	nations	bloom	0.5477386713027954	0.5
-index	train	0.00023522020000008582	1592	nations	bloom		0.2
-inference	training	0.00021258480000021506	1592	nations	bloom	1.0	0.2
-inference	testing	0.00013953380000018001	201	nations	bloom	0.24875621497631073	0.2
-inference	validation	0.00013745519999979193	199	nations	bloom	0.21105527877807617	0.2
-index	train	0.00028383279999992793	1592	nations	bloom		0.1
-inference	training	0.0002706262000000237	1592	nations	bloom	1.0	0.1
-inference	testing	0.00017221699999971917	201	nations	bloom	0.1442786008119583	0.1
-inference	validation	0.00017392535000020358	199	nations	bloom	0.12060301750898361	0.1
-index	train	0.0004499422999998615	1592	nations	bloom		0.01
-inference	training	0.000444682250000028	1592	nations	bloom	1.0	0.01
-inference	testing	0.0002800267000001355	201	nations	bloom	0.004975124262273312	0.01
-inference	validation	0.0002723849999998862	199	nations	bloom	0.01005025114864111	0.01
-index	train	0.0006288281999999867	1592	nations	bloom		0.001
-inference	training	0.0005858861500000146	1592	nations	bloom	1.0	0.001
-inference	testing	0.0003752403000000015	201	nations	bloom	0.0	0.001
-inference	validation	0.000375890599999984	199	nations	bloom	0.01005025114864111	0.001
-index	train	0.0008082440000016788	1592	nations	bloom		0.0001
-inference	training	0.0008043660000005559	1592	nations	bloom	1.0	0.0001
-inference	testing	0.000569339700000171	201	nations	bloom	0.0	0.0001
-inference	validation	0.0005486118000000318	199	nations	bloom	0.0	0.0001
-index	train	0.0010180939999990812	1592	nations	bloom		1e-05
-inference	training	0.0009913250000010976	1592	nations	bloom	1.0	1e-05
-inference	testing	0.0006226980000008098	201	nations	bloom	0.0	1e-05
-inference	validation	0.0006434897999998412	199	nations	bloom	0.0	1e-05
-index	train	1.1159599999999159e-05	5216	umls	default		
-inference	training	0.2675122710000011	5216	umls	default	1.0	
-inference	testing	0.013464310999999896	661	umls	default	1.0	
-inference	validation	0.012833205000001513	652	umls	default	1.0	
-index	train	0.0007181584999997881	5216	umls	pythonset		
-inference	training	0.0009822450000029903	5216	umls	pythonset	1.0	
-inference	testing	0.0001452315000001647	661	umls	pythonset	0.0	
-inference	validation	0.00014112849999996512	652	umls	pythonset	0.0	
-index	train	0.0001210586999999208	5216	umls	bloom		1.0
-inference	training	0.00010358549999978095	5216	umls	bloom	1.0	1.0
-inference	testing	3.488770000000585e-05	661	umls	bloom	1.0	1.0
-inference	validation	3.524109000000664e-05	652	umls	bloom	1.0	1.0
-index	train	0.00024060265000009907	5216	umls	bloom		0.8
-inference	training	0.00022298050000024716	5216	umls	bloom	1.0	0.8
-inference	testing	8.878270000014509e-05	661	umls	bloom	0.8819969892501831	0.8
-inference	validation	8.586649999990925e-05	652	umls	bloom	0.8941717743873596	0.8
-index	train	0.00024186089999993498	5216	umls	bloom		0.6
-inference	training	0.00022816020000000493	5216	umls	bloom	1.0	0.6
-inference	testing	8.906750000008401e-05	661	umls	bloom	0.6429651975631714	0.6
-inference	validation	8.851229999997656e-05	652	umls	bloom	0.6073619723320007	0.6
-index	train	0.000363362299999892	5216	umls	bloom		0.5
-inference	training	0.00034516510000006664	5216	umls	bloom	1.0	0.5
-inference	testing	0.000131537100000223	661	umls	bloom	0.5506808161735535	0.5
-inference	validation	0.000131340100000088	652	umls	bloom	0.5276073813438416	0.5
-index	train	0.0004919174000001191	5216	umls	bloom		0.2
-inference	training	0.00047031564999997497	5216	umls	bloom	1.0	0.2
-inference	testing	0.0001841220999997617	661	umls	bloom	0.21785174310207367	0.2
-inference	validation	0.00017963230000006547	652	umls	bloom	0.2039877325296402	0.2
-index	train	0.000601333900000256	5216	umls	bloom		0.1
-inference	training	0.0005827327499998702	5216	umls	bloom	1.0	0.1
-inference	testing	0.00022395109999990838	661	umls	bloom	0.10892587155103683	0.1
-inference	validation	0.00022721990000000857	652	umls	bloom	0.09815950691699982	0.1
-index	train	0.0010456229999959987	5216	umls	bloom		0.01
-inference	training	0.0009093469999967851	5216	umls	bloom	1.0	0.01
-inference	testing	0.0003548156000000802	661	umls	bloom	0.00756429648026824	0.01
-inference	validation	0.0003541857999998399	652	umls	bloom	0.007668711710721254	0.01
-index	train	0.0013175935000013794	5216	umls	bloom		0.001
-inference	training	0.0012202669999936688	5216	umls	bloom	1.0	0.001
-inference	testing	0.0004917179499997814	661	umls	bloom	0.0015128592494875193	0.001
-inference	validation	0.000492721999999901	652	umls	bloom	0.0	0.001
-index	train	0.0017264120000035632	5216	umls	bloom		0.0001
-inference	training	0.0017237049999963006	5216	umls	bloom	1.0	0.0001
-inference	testing	0.0006486494000000675	661	umls	bloom	0.0	0.0001
-inference	validation	0.0006812945499998335	652	umls	bloom	0.0	0.0001
-index	train	0.0020927380000017592	5216	umls	bloom		1e-05
-inference	training	0.0020575029999960748	5216	umls	bloom	1.0	1e-05
-inference	testing	0.0007539270000052056	661	umls	bloom	0.0	1e-05
-inference	validation	0.0007538300000007325	652	umls	bloom	0.0	1e-05
-index	train	1.0864919999988843e-05	1110	countries	default		
-inference	training	0.004507573499999751	1110	countries	default	1.0	
-inference	testing	0.00012703895000001352	24	countries	default	0.0	
-inference	validation	0.0001249513500003019	24	countries	default	0.0	
-index	train	0.00014987279999978398	1110	countries	pythonset		
-inference	training	0.00023726780000004054	1110	countries	pythonset	1.0	
-inference	testing	1.9856485000033787e-05	24	countries	pythonset	0.0	
-inference	validation	1.964086999997505e-05	24	countries	pythonset	0.0	
-index	train	5.9573190000001836e-05	1110	countries	bloom		1.0
-inference	training	4.150321999993878e-05	1110	countries	bloom	1.0	1.0
-inference	testing	2.3894190000035564e-05	24	countries	bloom	1.0	1.0
-inference	validation	2.39666799999938e-05	24	countries	bloom	1.0	1.0
-index	train	0.00011200899999970205	1110	countries	bloom		0.8
-inference	training	9.135660000012536e-05	1110	countries	bloom	1.0	0.8
-inference	testing	6.419026000003214e-05	24	countries	bloom	0.9583333134651184	0.8
-inference	validation	6.331809999977622e-05	24	countries	bloom	0.7916666865348816	0.8
-index	train	0.00011466340000012564	1110	countries	bloom		0.6
-inference	training	9.375289999979941e-05	1110	countries	bloom	1.0	0.6
-inference	testing	6.559753499999488e-05	24	countries	bloom	0.4166666567325592	0.6
-inference	validation	6.682395500000382e-05	24	countries	bloom	0.5	0.6
-index	train	0.00015770614999972566	1110	countries	bloom		0.5
-inference	training	0.00014128549999981033	1110	countries	bloom	1.0	0.5
-inference	testing	9.67904500001282e-05	24	countries	bloom	0.75	0.5
-inference	validation	9.715574999979992e-05	24	countries	bloom	0.5833333134651184	0.5
-index	train	0.0002215996000000331	1110	countries	bloom		0.2
-inference	training	0.000197369749999865	1110	countries	bloom	1.0	0.2
-inference	testing	0.00013917775000003017	24	countries	bloom	0.25	0.2
-inference	validation	0.0001362435000004325	24	countries	bloom	0.0416666679084301	0.2
-index	train	0.0002572920000002199	1110	countries	bloom		0.1
-inference	training	0.00024534665000004453	1110	countries	bloom	1.0	0.1
-inference	testing	0.00016611345000008273	24	countries	bloom	0.125	0.1
-inference	validation	0.00016968939999983945	24	countries	bloom	0.1666666716337204	0.1
-index	train	0.00040247299999975896	1110	countries	bloom		0.01
-inference	training	0.00038945649999995165	1110	countries	bloom	1.0	0.01
-inference	testing	0.0002687751999999932	24	countries	bloom	0.0	0.01
-inference	validation	0.0002644949000004004	24	countries	bloom	0.0	0.01
-index	train	0.00053637170000016	1110	countries	bloom		0.001
-inference	training	0.0005218584499999679	1110	countries	bloom	1.0	0.001
-inference	testing	0.00036240779999978655	24	countries	bloom	0.0	0.001
-inference	validation	0.0003579611499997526	24	countries	bloom	0.0	0.001
-index	train	0.0007493912000001047	1110	countries	bloom		0.0001
-inference	training	0.0007535633999999902	1110	countries	bloom	1.0	0.0001
-inference	testing	0.0004999990499999996	24	countries	bloom	0.0	0.0001
-inference	validation	0.0004985670499998207	24	countries	bloom	0.0	0.0001
-index	train	0.0008449079999977016	1110	countries	bloom		1e-05
-inference	training	0.0010003155000006814	1110	countries	bloom	1.0	1e-05
-inference	testing	0.0006171634499999358	24	countries	bloom	0.0	1e-05
-inference	validation	0.0006002149000003953	24	countries	bloom	0.0	1e-05
+index	train	1.218587999999965e-05	1110	countries	default		
+inference	training	0.005073989000000001	1110	countries	default	1.0	
+inference	testing	0.00012947700000003336	24	countries	default	0.0	
+inference	validation	0.0001274752499999865	24	countries	default	0.0	
+index	train	0.00014945060000002287	1110	countries	pythonset		
+inference	training	0.00028357560000005224	1110	countries	pythonset	1.0	
+inference	testing	2.126282999999951e-05	24	countries	pythonset	0.0	
+inference	validation	2.0614150000000108e-05	24	countries	pythonset	0.0	
+index	train	6.1030730000002365e-05	1110	countries	bloom		1.0
+inference	training	4.150043000000547e-05	1110	countries	bloom	1.0	1.0
+inference	testing	2.2694819999999895e-05	24	countries	bloom	1.0	1.0
+inference	validation	2.307597000000161e-05	24	countries	bloom	1.0	1.0
+index	train	0.00011753489999994926	1110	countries	bloom		0.8
+inference	training	9.490830000000728e-05	1110	countries	bloom	1.0	0.8
+inference	testing	7.200620000000324e-05	24	countries	bloom	0.9583333134651184	0.8
+inference	validation	6.75893500000413e-05	24	countries	bloom	0.7916666865348816	0.8
+index	train	0.0001138950000000083	1110	countries	bloom		0.6
+inference	training	9.544210000003161e-05	1110	countries	bloom	1.0	0.6
+inference	testing	7.143842000000067e-05	24	countries	bloom	0.4166666567325592	0.6
+inference	validation	6.706319999998377e-05	24	countries	bloom	0.5	0.6
+index	train	0.00016491329999999139	1110	countries	bloom		0.5
+inference	training	0.00017450950000004185	1110	countries	bloom	1.0	0.5
+inference	testing	0.00011278450000000717	24	countries	bloom	0.75	0.5
+inference	validation	0.00010205880000002665	24	countries	bloom	0.5833333134651184	0.5
+index	train	0.00021358970000004974	1110	countries	bloom		0.2
+inference	training	0.00019741300000006843	1110	countries	bloom	1.0	0.2
+inference	testing	0.00013334329999992178	24	countries	bloom	0.25	0.2
+inference	validation	0.00013614630000002848	24	countries	bloom	0.0416666679084301	0.2
+index	train	0.000286016999999994	1110	countries	bloom		0.1
+inference	training	0.00023658910000001754	1110	countries	bloom	1.0	0.1
+inference	testing	0.0001600838999999965	24	countries	bloom	0.125	0.1
+inference	validation	0.00016025790000000483	24	countries	bloom	0.1666666716337204	0.1
+index	train	0.00039565589999988047	1110	countries	bloom		0.01
+inference	training	0.00037939330000007486	1110	countries	bloom	1.0	0.01
+inference	testing	0.0002580546000000794	24	countries	bloom	0.0	0.01
+inference	validation	0.0002553038000000285	24	countries	bloom	0.0	0.01
+index	train	0.0005331990000000175	1110	countries	bloom		0.001
+inference	training	0.0005082639999995919	1110	countries	bloom	1.0	0.001
+inference	testing	0.0003634742000000912	24	countries	bloom	0.0	0.001
+inference	validation	0.0003525067000000881	24	countries	bloom	0.0	0.001
+index	train	0.0007135300000005174	1110	countries	bloom		0.0001
+inference	training	0.0007243950499999485	1110	countries	bloom	1.0	0.0001
+inference	testing	0.0004912569000000034	24	countries	bloom	0.0	0.0001
+inference	validation	0.0004910082000000315	24	countries	bloom	0.0	0.0001
+index	train	0.000830717999999564	1110	countries	bloom		1e-05
+inference	training	0.0008251130000012097	1110	countries	bloom	1.0	1e-05
+inference	testing	0.0005748450999999654	24	countries	bloom	0.0	1e-05
+inference	validation	0.0005745071999999851	24	countries	bloom	0.0	1e-05
+index	train	1.0990240000001706e-05	1592	nations	default		
+inference	training	0.00994705450000044	1592	nations	default	1.0	
+inference	testing	0.0012180199999995978	201	nations	default	1.0	
+inference	validation	0.0012239679999996866	199	nations	default	1.0	
+index	train	0.0002193214999999249	1592	nations	pythonset		
+inference	training	0.00033432140000009267	1592	nations	pythonset	1.0	
+inference	testing	5.546261500000149e-05	201	nations	pythonset	0.0	
+inference	validation	5.7504755000001845e-05	199	nations	pythonset	0.0	
+index	train	6.8363559999991e-05	1592	nations	bloom		1.0
+inference	training	5.11938500000042e-05	1592	nations	bloom	1.0	1.0
+inference	testing	2.6703095000000232e-05	201	nations	bloom	1.0	1.0
+inference	validation	2.6703250000004176e-05	199	nations	bloom	1.0	1.0
+index	train	0.00012868929999996226	1592	nations	bloom		0.8
+inference	training	0.00010886424999991817	1592	nations	bloom	1.0	0.8
+inference	testing	6.971378000002914e-05	201	nations	bloom	0.8407959938049316	0.8
+inference	validation	6.958877499998905e-05	199	nations	bloom	0.839195966720581	0.8
+index	train	0.00012914565000006207	1592	nations	bloom		0.6
+inference	training	0.00011043749999970487	1592	nations	bloom	1.0	0.6
+inference	testing	7.439804999993528e-05	201	nations	bloom	0.5472636818885803	0.6
+inference	validation	6.988899999988973e-05	199	nations	bloom	0.5979899764060974	0.6
+index	train	0.00018026380000009113	1592	nations	bloom		0.5
+inference	training	0.0001618386999997057	1592	nations	bloom	1.0	0.5
+inference	testing	0.00010415529999967532	201	nations	bloom	0.5273631811141968	0.5
+inference	validation	0.00010435309999969888	199	nations	bloom	0.5477386713027954	0.5
+index	train	0.00023571419999992573	1592	nations	bloom		0.2
+inference	training	0.0002185346000000976	1592	nations	bloom	1.0	0.2
+inference	testing	0.00014147299999986985	201	nations	bloom	0.24875621497631073	0.2
+inference	validation	0.00014305139999990502	199	nations	bloom	0.21105527877807617	0.2
+index	train	0.0002886677999999421	1592	nations	bloom		0.1
+inference	training	0.00026921325	1592	nations	bloom	1.0	0.1
+inference	testing	0.00017048255000009507	201	nations	bloom	0.1442786008119583	0.1
+inference	validation	0.00017092679999990422	199	nations	bloom	0.12060301750898361	0.1
+index	train	0.0004534394000000219	1592	nations	bloom		0.01
+inference	training	0.000432504099999953	1592	nations	bloom	1.0	0.01
+inference	testing	0.00027407684999989355	201	nations	bloom	0.004975124262273312	0.01
+inference	validation	0.0002750636000001805	199	nations	bloom	0.01005025114864111	0.01
+index	train	0.0005893470000017942	1592	nations	bloom		0.001
+inference	training	0.0006081488999999607	1592	nations	bloom	1.0	0.001
+inference	testing	0.000381977800000044	201	nations	bloom	0.0	0.001
+inference	validation	0.0003771266500001147	199	nations	bloom	0.01005025114864111	0.001
+index	train	0.0008347660000005419	1592	nations	bloom		0.0001
+inference	training	0.0008394530000011002	1592	nations	bloom	1.0	0.0001
+inference	testing	0.000580066300000226	201	nations	bloom	0.0	0.0001
+inference	validation	0.0005612735999999785	199	nations	bloom	0.0	0.0001
+index	train	0.0010022249999970256	1592	nations	bloom		1e-05
+inference	training	0.0010045830000002809	1592	nations	bloom	1.0	1e-05
+inference	testing	0.0006842252000000215	201	nations	bloom	0.0	1e-05
+inference	validation	0.0006858579000002862	199	nations	bloom	0.0	1e-05
+index	train	1.1225449999976433e-05	5216	umls	default		
+inference	training	0.26526931500000117	5216	umls	default	1.0	
+inference	testing	0.013697620999998605	661	umls	default	1.0	
+inference	validation	0.015427539999997464	652	umls	default	1.0	
+index	train	0.0007861550000001216	5216	umls	pythonset		
+inference	training	0.001080491500001557	5216	umls	pythonset	1.0	
+inference	testing	0.0001487333000000035	661	umls	pythonset	0.0	
+inference	validation	0.0001524659000001094	652	umls	pythonset	0.0	
+index	train	0.00012401250000007024	5216	umls	bloom		1.0
+inference	training	0.00010861700000006636	5216	umls	bloom	1.0	1.0
+inference	testing	3.816851999999926e-05	661	umls	bloom	1.0	1.0
+inference	validation	3.6411080000000596e-05	652	umls	bloom	1.0	1.0
+index	train	0.00025308414999987146	5216	umls	bloom		0.8
+inference	training	0.00023698664999987072	5216	umls	bloom	1.0	0.8
+inference	testing	9.104909999990696e-05	661	umls	bloom	0.8819969892501831	0.8
+inference	validation	0.00010380990000022905	652	umls	bloom	0.8941717743873596	0.8
+index	train	0.00029394329999998803	5216	umls	bloom		0.6
+inference	training	0.00023731399999995517	5216	umls	bloom	1.0	0.6
+inference	testing	9.094929999982071e-05	661	umls	bloom	0.6429651975631714	0.6
+inference	validation	9.172414999998324e-05	652	umls	bloom	0.6073619723320007	0.6
+index	train	0.0003917471500001213	5216	umls	bloom		0.5
+inference	training	0.00035597559999978046	5216	umls	bloom	1.0	0.5
+inference	testing	0.00013561260000010121	661	umls	bloom	0.5506808161735535	0.5
+inference	validation	0.0001322165000001263	652	umls	bloom	0.5276073813438416	0.5
+index	train	0.0005268252000000473	5216	umls	bloom		0.2
+inference	training	0.0004628892999999579	5216	umls	bloom	1.0	0.2
+inference	testing	0.0001757970499999928	661	umls	bloom	0.21785174310207367	0.2
+inference	validation	0.0001726271999999085	652	umls	bloom	0.2039877325296402	0.2
+index	train	0.0005781278999998918	5216	umls	bloom		0.1
+inference	training	0.0005531522000000067	5216	umls	bloom	1.0	0.1
+inference	testing	0.00021655019999986533	661	umls	bloom	0.10892587155103683	0.1
+inference	validation	0.00024160250000022644	652	umls	bloom	0.09815950691699982	0.1
+index	train	0.0010074490000029357	5216	umls	bloom		0.01
+inference	training	0.0009143089999987808	5216	umls	bloom	1.0	0.01
+inference	testing	0.00038661120000007545	661	umls	bloom	0.00756429648026824	0.01
+inference	validation	0.0003671484000001612	652	umls	bloom	0.007668711710721254	0.01
+index	train	0.0014817879999995398	5216	umls	bloom		0.001
+inference	training	0.0012798299999978724	5216	umls	bloom	1.0	0.001
+inference	testing	0.0005620177000000837	661	umls	bloom	0.0015128592494875193	0.001
+inference	validation	0.0005542717000000863	652	umls	bloom	0.0	0.001
+index	train	0.0020214109999976415	5216	umls	bloom		0.0001
+inference	training	0.0017750049999989415	5216	umls	bloom	1.0	0.0001
+inference	testing	0.0006746136000000292	661	umls	bloom	0.0	0.0001
+inference	validation	0.000633888800000193	652	umls	bloom	0.0	0.0001
+index	train	0.00204624599999903	5216	umls	bloom		1e-05
+inference	training	0.0020525379999973836	5216	umls	bloom	1.0	1e-05
+inference	testing	0.0007317700000015748	661	umls	bloom	0.0	1e-05
+inference	validation	0.0007723129999988032	652	umls	bloom	0.0	1e-05
+index	train	1.0907500000030268e-05	8544	kinships	default		
+inference	training	0.7579606769999998	8544	kinships	default	1.0	
+inference	testing	0.036565719500000426	1074	kinships	default	1.0	
+inference	validation	0.042864223000002255	1068	kinships	default	1.0	
+index	train	0.0011429389999975115	8544	kinships	pythonset		
+inference	training	0.0017037009999967268	8544	kinships	pythonset	1.0	
+inference	testing	0.00023311739999982707	1074	kinships	pythonset	0.0	
+inference	validation	0.00022624799999988455	1068	kinships	pythonset	0.0	
+index	train	0.00016867600000018966	8544	kinships	bloom		1.0
+inference	training	0.00016576045000000762	8544	kinships	bloom	1.0	1.0
+inference	testing	4.302935999998425e-05	1074	kinships	bloom	1.0	1.0
+inference	validation	4.055334000000244e-05	1068	kinships	bloom	1.0	1.0
+index	train	0.00033239790000010315	8544	kinships	bloom		0.8
+inference	training	0.0003167175999998051	8544	kinships	bloom	1.0	0.8
+inference	testing	9.814569999946343e-05	1074	kinships	bloom	0.866852879524231	0.8
+inference	validation	9.760370000009289e-05	1068	kinships	bloom	0.8642321825027466	0.8
+index	train	0.0003338861999999665	8544	kinships	bloom		0.6
+inference	training	0.00032111510000021326	8544	kinships	bloom	1.0	0.6
+inference	testing	0.00010185265000011157	1074	kinships	bloom	0.6405959129333496	0.6
+inference	validation	0.00010519289999990633	1068	kinships	bloom	0.6029962301254272	0.6
+index	train	0.0005452376999997455	8544	kinships	bloom		0.5
+inference	training	0.00048451010000007957	8544	kinships	bloom	1.0	0.5
+inference	testing	0.00015340869999960204	1074	kinships	bloom	0.5642458200454712	0.5
+inference	validation	0.00017261939999997368	1068	kinships	bloom	0.5711610317230225	0.5
+index	train	0.0007021812999997934	8544	kinships	bloom		0.2
+inference	training	0.0006713304999998116	8544	kinships	bloom	1.0	0.2
+inference	testing	0.0002076337000001871	1074	kinships	bloom	0.2178770899772644	0.2
+inference	validation	0.00020391590000059522	1068	kinships	bloom	0.2162921279668808	0.2
+index	train	0.000813264000001368	8544	kinships	bloom		0.1
+inference	training	0.0007870129999965059	8544	kinships	bloom	1.0	0.1
+inference	testing	0.00025231320000003167	1074	kinships	bloom	0.11731843650341034	0.1
+inference	validation	0.0002510929999999689	1068	kinships	bloom	0.09456928819417953	0.1
+index	train	0.0012703039999948373	8544	kinships	bloom		0.01
+inference	training	0.001280913000002215	8544	kinships	bloom	1.0	0.01
+inference	testing	0.0004134186000001705	1074	kinships	bloom	0.00931098684668541	0.01
+inference	validation	0.0004099775499994962	1068	kinships	bloom	0.006554306950420141	0.01
+index	train	0.0018277679999982865	8544	kinships	bloom		0.001
+inference	training	0.0017940475000024492	8544	kinships	bloom	1.0	0.001
+inference	testing	0.0005503103999998871	1074	kinships	bloom	0.0009310987079516053	0.001
+inference	validation	0.0005467045999999698	1068	kinships	bloom	0.0	0.001
+index	train	0.002580823999998927	8544	kinships	bloom		0.0001
+inference	training	0.0024971599999972227	8544	kinships	bloom	1.0	0.0001
+inference	testing	0.0007294440000045199	1074	kinships	bloom	0.0	0.0001
+inference	validation	0.0007386162000003083	1068	kinships	bloom	0.0	0.0001
+index	train	0.002925924999995999	8544	kinships	bloom		1e-05
+inference	training	0.0030332790000002774	8544	kinships	bloom	1.0	1e-05
+inference	testing	0.0010103020000045149	1074	kinships	bloom	0.0	1e-05
+inference	validation	0.0009028639999968391	1068	kinships	bloom	0.0	1e-05
+index	train	1.1092674999950702e-05	32203	dbpedia50	default		
+inference	training	15.736954146000002	32203	dbpedia50	default	1.0	
+inference	testing	0.4206190190000001	2095	dbpedia50	default	0.6825775504112244	
+inference	validation	0.005749761999993552	123	dbpedia50	default	0.4146341383457184	
+index	train	0.006914702000003103	32203	dbpedia50	pythonset		
+inference	training	0.0104605199999952	32203	dbpedia50	pythonset	1.0	
+inference	testing	0.0006702501000006578	2095	dbpedia50	pythonset	0.018615752458572388	
+inference	validation	4.8466170000125434e-05	123	dbpedia50	pythonset	0.016260161995887756	
+index	train	0.0005394805000022984	32203	dbpedia50	bloom		1.0
+inference	training	0.0005270938500004263	32203	dbpedia50	bloom	1.0	1.0
+inference	testing	5.855650000000878e-05	2095	dbpedia50	bloom	1.0	1.0
+inference	validation	2.532432999998946e-05	123	dbpedia50	bloom	1.0	1.0
+index	train	0.000980566999999155	32203	dbpedia50	bloom		0.8
+inference	training	0.0009938564999956156	32203	dbpedia50	bloom	1.0	0.8
+inference	testing	0.00013253554999934634	2095	dbpedia50	bloom	0.8868734836578369	0.8
+inference	validation	6.805748000004996e-05	123	dbpedia50	bloom	0.8780487775802612	0.8
+index	train	0.0009857280000034052	32203	dbpedia50	bloom		0.6
+inference	training	0.000994705999993073	32203	dbpedia50	bloom	1.0	0.6
+inference	testing	0.00014289164999965466	2095	dbpedia50	bloom	0.6257756352424622	0.6
+inference	validation	6.775341499995591e-05	123	dbpedia50	bloom	0.6585366129875183	0.6
+index	train	0.0014956499999954076	32203	dbpedia50	bloom		0.5
+inference	training	0.0014874555000048417	32203	dbpedia50	bloom	1.0	0.5
+inference	testing	0.0002081105000002026	2095	dbpedia50	bloom	0.5718377232551575	0.5
+inference	validation	9.985605000011333e-05	123	dbpedia50	bloom	0.5284552574157715	0.5
+index	train	0.0019696120000105566	32203	dbpedia50	bloom		0.2
+inference	training	0.0019879095000021607	32203	dbpedia50	bloom	1.0	0.2
+inference	testing	0.00027937679999965324	2095	dbpedia50	bloom	0.2157517969608307	0.2
+inference	validation	0.0001317274999991014	123	dbpedia50	bloom	0.22764228284358978	0.2
+index	train	0.0025198415000033947	32203	dbpedia50	bloom		0.1
+inference	training	0.0025108350000095925	32203	dbpedia50	bloom	1.0	0.1
+inference	testing	0.00035164279999975177	2095	dbpedia50	bloom	0.1303102672100067	0.1
+inference	validation	0.00016943400000002384	123	dbpedia50	bloom	0.1463414579629898	0.1
+index	train	0.004087697999999307	32203	dbpedia50	bloom		0.01
+inference	training	0.0041278759999983095	32203	dbpedia50	bloom	1.0	0.01
+inference	testing	0.0005510873500000457	2095	dbpedia50	bloom	0.026252983137965202	0.01
+inference	validation	0.00027062624999913966	123	dbpedia50	bloom	0.03252032399177551	0.01
+index	train	0.00568632799999591	32203	dbpedia50	bloom		0.001
+inference	training	0.005786417999999571	32203	dbpedia50	bloom	1.0	0.001
+inference	testing	0.000728393999999355	2095	dbpedia50	bloom	0.01909307949244976	0.001
+inference	validation	0.00036743309999991424	123	dbpedia50	bloom	0.016260161995887756	0.001
+index	train	0.007834092000010173	32203	dbpedia50	bloom		0.0001
+inference	training	0.008130224500000338	32203	dbpedia50	bloom	1.0	0.0001
+inference	testing	0.000980582000003949	2095	dbpedia50	bloom	0.01909307949244976	0.0001
+inference	validation	0.0005082211500003098	123	dbpedia50	bloom	0.016260161995887756	0.0001
+index	train	0.009569731999988562	32203	dbpedia50	bloom		1e-05
+inference	training	0.009487212999999883	32203	dbpedia50	bloom	1.0	1e-05
+inference	testing	0.0011682349999944108	2095	dbpedia50	bloom	0.018615752458572388	1e-05
+inference	validation	0.0006082296000002429	123	dbpedia50	bloom	0.016260161995887756	1e-05

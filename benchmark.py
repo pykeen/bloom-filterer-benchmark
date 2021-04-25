@@ -376,7 +376,7 @@ def get_bloom_benchmark_df(force: bool = False, precision: Optional[int] = None)
 
 
 def iter_datasets(test: bool = False) -> Iterable[Dataset]:
-    it = tqdm(datasets[:4] if test else datasets, desc='Datasets')
+    it = tqdm(datasets[:5] if test else datasets, desc='Datasets')
     for dataset in it:
         dataset_instance = get_dataset(dataset=dataset)
         it.set_postfix(dataset=dataset_instance.get_normalized_name())
