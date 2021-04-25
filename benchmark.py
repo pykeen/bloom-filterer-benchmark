@@ -269,7 +269,7 @@ def benchmark_filterer(
         **filterer_kwargs,
     )
 
-    # measure creation (=indexing) time
+    tqdm.write(f'[{filterer}]  measure creation (=indexing) time')
     filterer_cls = filterer_resolver.lookup(filterer)
     timer = TorchTimer(
         stmt="filterer_cls(triples_factory=factory, **kwargs)",
@@ -291,7 +291,7 @@ def benchmark_filterer(
     # instantiate filterer for further tests
     filterer = filterer_resolver.make(filterer, pos_kwargs=filterer_kwargs, triples_factory=dataset.training)
     for key, value in dataset.factory_dict.items():
-        # measure inference time
+        tqdm.write(f'[{filterer}] measure inference time ({key})')
         timer = TorchTimer(
             stmt="filterer(mapped_triples)",
             globals=dict(
@@ -329,7 +329,7 @@ def get_bloom_benchmark_df(force: bool = False, precision: Optional[int] = None)
         )
         for error_rate in inner_it:
             inner_it.set_postfix({'er': error_rate})
-            # measure creation (=indexing) time
+            tqdm.write('measure creation (=indexing) time')
             timer = timeit.Timer(
                 stmt="filterer_cls(triples_factory=triples_factory, error_rate=error_rate)",
                 globals=dict(
@@ -353,7 +353,7 @@ def get_bloom_benchmark_df(force: bool = False, precision: Optional[int] = None)
                 'natural_size': humanize.naturalsize(filterer.bit_array.numel() / 8),
             }
             for key, value in dataset.factory_dict.items():
-                # measure inference time
+                tqdm.write(f'measure inference time ({key})')
                 timer = timeit.Timer(
                     stmt="filterer.contains(batch=mapped_triples)",
                     globals=dict(
@@ -379,6 +379,7 @@ def iter_datasets(test: bool = False) -> Iterable[Dataset]:
     it = tqdm(datasets[:5] if test else datasets, desc='Datasets')
     for dataset in it:
         dataset_instance = get_dataset(dataset=dataset)
+        it.write(f'loaded {dataset_instance.get_normalized_name()}')
         it.set_postfix(dataset=dataset_instance.get_normalized_name())
         yield dataset_instance
 
