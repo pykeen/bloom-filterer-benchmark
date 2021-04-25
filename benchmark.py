@@ -56,6 +56,7 @@ datasets = sorted(datasets, key=lambda s: get_docdata(datasets_dict[s])['statist
 #: Error rates to check
 error_rates = [1.0, 0.8, 0.6, 0.5, 0.2, 0.1, 0.01, 0.001, 0.0001, 0.00001]
 
+HUE_ORDER = ['pythonset', 'bloom']
 
 @click.command()
 @click.option('--force', is_flag=True)
@@ -63,7 +64,8 @@ error_rates = [1.0, 0.8, 0.6, 0.5, 0.2, 0.1, 0.01, 0.001, 0.0001, 0.00001]
 @click.option('--precision', type=int, default=DEFAULT_PRECISION, show_default=True)
 def main(force: bool, test: bool, precision: int):
     """Benchmark performance of the bloom filterer."""
-    comparison_df = compare_filterers(test=test, force=force)  # TODO don't hard code test later
+    comparison_df = compare_filterers(test=test, force=force)
+    comparison_df.sort_values('filterer', ascending=True, inplace=True)
     plot_comparison_setup(comparison_df)
     plot_comparison_lookup_time(comparison_df)
     plot_comparison_errors(comparison_df)
@@ -112,7 +114,7 @@ def plot_lookup_times(df: pd.DataFrame):
 
 def plot_size(df: pd.DataFrame):
     fig, axes = plt.subplots(nrows=1, ncols=2, figsize=(12, 5), sharey='all')
-    sns.scatterplot(data=df, x="training_triples", y="size", hue='error_rate', ax=axes[0])
+    sns.scatterplot(data=df, x="training_triples", y="size", hue='error_rate', alpha=0.8, ax=axes[0])
     sns.lineplot(data=df, x="error_rate", y="size", hue='dataset', ax=axes[1])
     axes[0].set_ylabel('Size (bytes)')
     for axis in axes.ravel():
@@ -125,7 +127,7 @@ def plot_size(df: pd.DataFrame):
 
 def plot_creation_time(df: pd.DataFrame):
     fig, axes = plt.subplots(nrows=1, ncols=2, figsize=(12, 5), sharey='all')
-    sns.scatterplot(data=df, x="training_triples", y="time", hue='error_rate', ax=axes[0])
+    sns.scatterplot(data=df, x="training_triples", y="time", hue='error_rate', alpha=0.8, ax=axes[0])
     sns.lineplot(data=df, x="error_rate", y="time", hue='dataset', ax=axes[1])
     axes[0].set_ylabel('Creation Time (s)')
     for axis in axes.ravel():
@@ -145,6 +147,7 @@ def plot_comparison_setup(df: pd.DataFrame):
         y='dataset',
         x='time',
         hue='filterer',
+        # style='filterer',
         ax=axes,
         size=8,
         alpha=0.8,
@@ -159,19 +162,30 @@ def plot_comparison_setup(df: pd.DataFrame):
 
 
 def plot_comparison_lookup_time(df: pd.DataFrame):
-    testing_df = df.loc[df['subset'] == 'testing', ['dataset', 'filterer', 'time']]
-    validation_df = df.loc[df['subset'] == 'validation', ['dataset', 'filterer', 'time']]
+    columns = ['dataset', 'filterer', 'time', 'num_triples']
 
     fig, axes = plt.subplots(1, 2, figsize=(12, 5), sharey='all')
-    sns.stripplot(data=testing_df, x='dataset', hue='filterer', y='time', dodge=True, ax=axes[0])
-    sns.stripplot(data=validation_df, x='dataset', hue='filterer', y='time', dodge=True, ax=axes[1])
-    axes[0].set_title('Testing')
-    axes[1].set_title('Validation')
+    for key, ax in zip(('testing', 'validation'), axes):
+        data = df.loc[df['subset'] == key, columns]
+        sns.scatterplot(
+            data=data,
+            x='num_triples',
+            hue='filterer',
+            hue_order=HUE_ORDER,
+            style='filterer',
+            style_order=HUE_ORDER,
+            y='time',
+            alpha=0.8,
+            ax=ax,
+        )
+        ax.set_title(key.capitalize())
+        ax.set_yscale('log')
+        ax.set_xscale('log')
+        ax.set_xlabel('Number Triples')
+
     axes[0].set_ylabel('Lookup Time (s)')
     axes[1].set_ylabel('')
-    for ax in axes:
-        ax.set_yscale('log')
-        ax.set_xlabel('')
+
     fig.tight_layout()
     fig.savefig(COMPARISON / 'lookup_times.svg')
     fig.savefig(COMPARISON / 'lookup_times.png', dpi=300)
@@ -179,22 +193,30 @@ def plot_comparison_lookup_time(df: pd.DataFrame):
 
 def plot_comparison_errors(df: pd.DataFrame):
     columns = ['dataset', 'filterer', 'observed_error_rate', 'num_triples']
-    testing_df = df.loc[df['subset'] == 'testing', columns]
-    validation_df = df.loc[df['subset'] == 'validation', columns]
 
-    testing_df['adj_observed_error_rate'] = testing_df['observed_error_rate'] + 1 / testing_df['num_triples']
-    validation_df['adj_observed_error_rate'] = validation_df['observed_error_rate'] + 1 / validation_df['num_triples']
+    fig, axes = plt.subplots(1, 2, figsize=(12, 5), sharex='all')
+    for key, ax in zip(('testing', 'validation'), axes):
+        data = df.loc[df['subset'] == key, columns]
+        data['adj_observed_error_rate'] = data['observed_error_rate'] + 1 / data['num_triples']
+        sns.scatterplot(
+            data=data,
+            x='num_triples',
+            y='adj_observed_error_rate',
+            hue='filterer',
+            hue_order=HUE_ORDER,
+            style='filterer',
+            style_order=HUE_ORDER,
+            alpha=0.8,
+            ax=ax,
+        )
+        ax.set_title(key.capitalize())
+        ax.set_xlabel('Number Triples')
+        ax.set_yscale('log')
+        ax.set_xscale('log')
 
-    fig, axes = plt.subplots(1, 2, figsize=(12, 5), sharey='all')
-    sns.stripplot(data=testing_df, x='dataset', hue='filterer', y='adj_observed_error_rate', dodge=True, ax=axes[0])
-    sns.stripplot(data=validation_df, x='dataset', hue='filterer', y='adj_observed_error_rate', dodge=True, ax=axes[1])
-    axes[0].set_title('Testing')
-    axes[1].set_title('Validation')
     axes[0].set_ylabel('Adjusted Observed Error Rate')
     axes[1].set_ylabel('')
-    for ax in axes:
-        ax.set_xlabel('')
-        ax.set_yscale('log')
+
     fig.tight_layout()
     fig.savefig(COMPARISON / 'errors.svg')
     fig.savefig(COMPARISON / 'errors.png', dpi=300)
@@ -202,23 +224,29 @@ def plot_comparison_errors(df: pd.DataFrame):
 
 def plot_comparison_2d(df: pd.DataFrame):
     columns = ['dataset', 'filterer', 'observed_error_rate', 'time', 'num_triples']
-    testing_df = df.loc[df['subset'] == 'testing', columns]
-    validation_df = df.loc[df['subset'] == 'validation', columns]
-
-    testing_df['adj_observed_error_rate'] = testing_df['observed_error_rate'] + 1 / testing_df['num_triples']
-    validation_df['adj_observed_error_rate'] = validation_df['observed_error_rate'] + 1 / validation_df['num_triples']
 
     fig, axes = plt.subplots(1, 2, figsize=(12, 5), sharey='all')
-    sns.scatterplot(data=testing_df, y='time', hue='filterer', x='adj_observed_error_rate', ax=axes[0])
-    sns.scatterplot(data=validation_df, y='time', hue='filterer', x='adj_observed_error_rate', ax=axes[1])
-    axes[0].set_title('Testing')
-    axes[1].set_title('Validation')
-    axes[0].set_ylabel('Lookup Time (s)')
-
-    for ax in axes:
+    for key, ax in zip(('testing', 'validation'), axes):
+        data = df.loc[df['subset'] == 'testing', columns]
+        data['adj_observed_error_rate'] = data['observed_error_rate'] + 1 / data['num_triples']
+        sns.scatterplot(
+            data=data,
+            x='adj_observed_error_rate',
+            y='time',
+            hue='filterer',
+            hue_order=HUE_ORDER,
+            style='filterer',
+            style_order=HUE_ORDER,
+            alpha=0.8,
+            ax=ax,
+        )
+        ax.set_title(key.capitalize())
         ax.set_yscale('log')
         ax.set_xscale('log')
         ax.set_xlabel('Adjusted Observed Error Rate')
+
+    axes[0].set_ylabel('Lookup Time (s)')
+
     fig.tight_layout()
     fig.savefig(COMPARISON / 'errors_2d.svg')
     fig.savefig(COMPARISON / 'errors_2d.png', dpi=300)
@@ -241,7 +269,7 @@ def compare_filterers(test: bool = False, force: bool = False):
 
 def iter_experiments() -> Iterable[Tuple[str, Mapping[str, Any]]]:
     experiments = [
-        ('default', {}),
+        # ('default', {}),
         ('pythonset', {}),
         *(
             ('bloom', dict(error_rate=error_rate))
@@ -269,8 +297,8 @@ def benchmark_filterer(
         **filterer_kwargs,
     )
 
-    tqdm.write(f'[{filterer}]  measure creation (=indexing) time')
     filterer_cls = filterer_resolver.lookup(filterer)
+    tqdm.write(f'[{filterer_cls.__name__}] measure creation (=indexing) time')
     timer = TorchTimer(
         stmt="filterer_cls(triples_factory=factory, **kwargs)",
         globals=dict(
@@ -291,6 +319,8 @@ def benchmark_filterer(
     # instantiate filterer for further tests
     filterer = filterer_resolver.make(filterer, pos_kwargs=filterer_kwargs, triples_factory=dataset.training)
     for key, value in dataset.factory_dict.items():
+        if key == 'training':
+            continue
         tqdm.write(f'[{filterer}] measure inference time ({key})')
         timer = TorchTimer(
             stmt="filterer(mapped_triples)",
