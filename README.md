@@ -1,8 +1,9 @@
 # bloom-filterer-benchmark
 
 The bloom filterer was introduced in [PyKEEN #401](https://github.com/pykeen/pykeen/pull/401)
-by Max Berrendorf ([@mberr](https://github.com/mberr)). This benchmarking can be rerun
-with `python benchmark.py --force`.
+by Max Berrendorf ([@mberr](https://github.com/mberr)) because the exact algorithm for filtering false
+negative samples during training was slow, and an approximation algorithm could do an adequate job while
+having huge memory and time improvements. This benchmarking can be rerun with `python benchmark.py --force`.
 
 ## Benchmarking
 
