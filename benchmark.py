@@ -139,23 +139,25 @@ def plot_creation_time(df: pd.DataFrame):
 
 
 def plot_comparison_setup(df: pd.DataFrame):
-    indexing_df = df.loc[df['operation'] == 'index', ['dataset', 'filterer', 'time']]
+    indexing_df = df.loc[df['operation'] == 'index', ['dataset', 'filterer', 'time', 'num_triples']]
 
-    fig, axes = plt.subplots(figsize=(10, 5))
-    sns.stripplot(
+    fig, axes = plt.subplots(figsize=(10, 4))
+    sns.scatterplot(
         data=indexing_df,
-        y='dataset',
-        x='time',
+        y='time',
+        x='num_triples',
         hue='filterer',
-        # style='filterer',
+        hue_order=HUE_ORDER,
+        style='filterer',
+        style_order=HUE_ORDER,
         ax=axes,
         size=8,
         alpha=0.8,
     )
-    axes.set_xlabel('Index Time (s)')
-    axes.set_ylabel('')
+    axes.set_ylabel('Index Time (s)')
+    axes.set_xlabel('Number Triples')
     axes.set_xscale('log')
-    axes.set_title('Setup Time')
+    axes.set_yscale('log')
 
     fig.savefig(COMPARISON / 'setup.svg')
     fig.savefig(COMPARISON / 'setup.png', dpi=300)
