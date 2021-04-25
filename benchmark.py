@@ -63,7 +63,7 @@ error_rates = [1.0, 0.8, 0.6, 0.5, 0.2, 0.1, 0.01, 0.001, 0.0001, 0.00001]
 @click.option('--precision', type=int, default=DEFAULT_PRECISION, show_default=True)
 def main(force: bool, test: bool, precision: int):
     """Benchmark performance of the bloom filterer."""
-    comparison_df = compare_filterers(test=True, force=force)  # TODO don't hard code test later
+    comparison_df = compare_filterers(test=test, force=force)  # TODO don't hard code test later
     plot_comparison_setup(comparison_df)
     plot_comparison_lookup_time(comparison_df)
     plot_comparison_errors(comparison_df)
